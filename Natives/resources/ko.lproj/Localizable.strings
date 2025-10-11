@@ -4,13 +4,13 @@
 */
 
 "game.menu.force_close" = "강제 종료";
-"game.menu.confirm.force_close" = "강제 종료를 하시겠습니까?";
+"game.menu.confirm.force_close" = "강제로 종료하시겠습니까?";
 "game.menu.log_output" = "로그 확인";
 "game.menu.custom_controls" = "사용자 지정 조작";
 
-"game.note.airplay" = "AirPlay로 마인크래프트 화면을 미러링하는 중입니다";
+"game.note.airplay" = "AirPlay로 Minecraft 화면을 미러링하는 중입니다";
 
-"game.title.exit_code" = "마인크래프트가 종료 코드 %d와(과) 함께 종료했습니다";
+"game.title.exit_code" = "Minecraft가 종료되었습니다. (코드 %d)";
 
 // The play button
 "Play" = "시작하기";
@@ -19,15 +19,15 @@
 // Version categories
 "Installed" = "설치됨";
 "Snapshot" = "스냅숏";
-"Releases" = "릴리스";
+"Releases" = "릴리즈";
 "Unstable" = "불안정";
-"Old-beta" = "Old-beta";
-"Old-alpha" = "Old-alpha";
+"Old-beta" = "구 베타";
+"Old-alpha" = "구 알파";
 
 // Custom controls
 "Copy" = "복사";
 "Edit" = "수정";
-"Move" = "움직이다";
+"Move" = "이동";
 "Remove" = "제거";
 "Resize" = "크기 조절";
 // Visibility
@@ -39,7 +39,7 @@
 "custom_controls.button_edit.mapping" = "매핑";
 "custom_controls.button_edit.orientation" = "방향";
 "custom_controls.button_edit.toggleable" = "토글";
-"custom_controls.button_edit.swipeable" = "끌어당기기";
+"custom_controls.button_edit.swipeable" = "스와이프";
 "custom_controls.button_edit.bg_color" = "배경 색상";
 "custom_controls.button_edit.stroke_color" = "강조 색";
 
@@ -47,7 +47,7 @@
 "custom_controls.control_menu.exit" = "나가기";
 "custom_controls.control_menu.save" = "저장";
 "custom_controls.control_menu.save.error.json" = "JSON 오류";
-"custom_controls.control_menu.save.error.write" = "파일 저장중 오류 발생";
+"custom_controls.control_menu.save.error.write" = "파일 저장 중 오류 발생";
 "custom_controls.control_menu.load" = "불러오기";
 "custom_controls.control_menu.make_default" = "기본값으로 설정";
 "custom_controls.control_menu.safe_area" = "안전한 공간";
@@ -55,7 +55,7 @@
 
 "launcher.menu.custom_controls" = "사용자 지정 조작";
 
-"launcher.wait_jit.title" = "JIT를 기다리고 있습니다";
+"launcher.wait_jit.title" = "JIT 대기 중";
 "launcher.wait_jit.message" = "Amethyst는 최고의 성능을 내기 위해 JIT 컴파일 기술을 활용합니다.";
 
 "login.alert.field.username" = "사용자명";
@@ -75,7 +75,7 @@
 "login.warn.title.ios19_jitdead" = "Amethyst는 iOS 26 및 이후 버전에서는 사용할 수 없습니다.";
 "login.warn.message.ios19_jitdead" = "iOS의 JIT 활성화 제한 문제로 인해 Amethyst가 현재 버전에서는 작동하지 않습니다. 이 문제를 해결할 새로운 방법을 연구하고 있습니다.\n\n'확인'을 누르면 앱이 종료됩니다.";
 
-"login.warn.title.demomode" = "당신의 계정은 데모 버전입니다";
+"login.warn.title.demomode" = "이 계정은 데모 버전 전용입니다";
 
 "News" = "소식";
 "Settings" = "설정";
@@ -86,7 +86,7 @@
 "preference.section.java" = "Java 기능";
 
 "preference.title.game_directory" = "게임 디렉토리";
-"preference.title.cosmetica" = "코스메티카 망토";
+"preference.title.cosmetica" = "Cosmetica 망토";
 "preference.title.appicon" = "앱 아이콘 설정";
 
 "preference.title.reset_warnings" = "모든 경고 초기화";
@@ -100,11 +100,19 @@
 "preference.title.allow_microphone" = "마이크 입력 허용";
 "preference.title.virtmouse_enable" = "가상 마우스";
 
-"preference.title.java_args" = "JVM 시작 스크립트";
+"preference.title.java_args" = "JVM 실행 인수";
 "preference.title.auto_ram" = "자동 RAM 할당";
 "preference.detail.auto_ram" = "자동 RAM 할당 활성화하기";
-"preference.detail.allocated_memory" = "Minecraft 메모리 할당 조절";
+"preference.title.allocated_memory" = "메모리 할당 (MB)";
+"preference.detail.allocated_memory" = "Minecraft에 할당될 메모리 크기를 조절합니다";
+"preference.warn.allocated_memory" = "운영 체제의 제약으로 인해, 현재 또는 그 이상의 값에서는 동작이 불안정해질 수 있습니다. 주의해주세요.";
 
 "preference.profile.title.name" = "이름";
+"preference.profile.title.version" = "버전";
+"preference.profile.title.version_type" = "버전 유형";
+"preference.profile.title.default_touch_control" = "터치 컨트롤";
+"preference.profile.title.default_gamepad_control" = "게임패드 컨트롤";
+"profile.section.instance" = "게임 인스턴스 설정";
+"controller_configurator.title.type.playstation" = "PlayStation";
 "controller_configurator.playstation.title.named_back" = "선택";
 "controller_configurator.section.footer.controller_style" = "이 설정 화면에 표시되는 컨트롤러 버튼 이름을 변경합니다.";
