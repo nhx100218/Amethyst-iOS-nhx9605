@@ -153,7 +153,6 @@
 "preference.detail.auto_ram" = "Ativa o ajuste automático de RAM";
 "preference.title.allocated_memory" = "Alocação de memória (MB)";
 "preference.detail.allocated_memory" = "Controla o quanto de RAM será usado pelo Minecraft";
-
 "preference.title.debug_skip_wait_jit" = "Ignorar caixa de diálogo \"Aguardando JIT\"";
 "preference.title.debug_ipad_ui" = "Desbloquear iPadOS UI";
 "preference.detail.debug_ipad_ui" = "Desbloqueie a interface de usuário exclusiva do iPad (alerta, teclado, etc.) se habilitada ou iPhone UI se estiver desativado.";
