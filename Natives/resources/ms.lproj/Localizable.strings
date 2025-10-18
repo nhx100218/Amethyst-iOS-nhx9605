@@ -256,7 +256,6 @@
 "preference.warn.allocated_memory" = "Disebabkan oleh pengehadan dalam sistem pengendalian itu sendiri, pilihan ini boleh menyebabkan ketidakstabilan pada nilai ini dan yang lebih tinggi. Teruskan dengan berhati-hati.";
 "preference.title.custom_env" = "Pembolehubah persekitaran";
 "preference.detail.custom_env" = "Pilihan ini sedang dalam pembinaan. Cipta dan sunting custom_env.txt buat sementara ini.";
-
 "preference.title.debug_skip_wait_jit" = "Langkau dialog \"Menunggu JIT\"";
 "preference.detail.debug_skip_wait_jit" = "Ini tidak membenarkan anda melancarkan tanpa JIT, sebaliknya ini melangkau semakan penyahpepijat, kerana semakan ini gagal pada jailbreak tertentu.";
 "preference.title.debug_ipad_ui" = "Buka kunci UI iPadOS";
