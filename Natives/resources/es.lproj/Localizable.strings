@@ -223,7 +223,6 @@
 "preference.warn.allocated_memory" = "Debido a limitaciones con el sistema operativo en sí, esta opción puede causar inestabilidad en esta y mayores cantidades. Procede con cuidado.";
 "preference.title.custom_env" = "Variables de entorno";
 "preference.detail.custom_env" = "Esta opción está en construcción. Crea y edita custom_env.txt mientras tanto.";
-
 "preference.title.debug_skip_wait_jit" = "Omitir diálogo \"Esperando por JIT\"";
 "preference.detail.debug_skip_wait_jit" = "Esto no le permite jugar sin JIT, solo la omite la comprobación del depurador, porque la comprobación falla en ciertas jailbreaks.";
 "preference.title.debug_ipad_ui" = "Activar interfaz de iPadOS";
