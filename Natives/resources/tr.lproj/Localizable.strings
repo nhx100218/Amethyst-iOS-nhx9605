@@ -177,11 +177,13 @@
 "preference.title.renderer.release.auto" = "Otomatik";
 "preference.title.renderer.release.gl4es" = "holy gl4es";
 "preference.title.renderer.release.angle" = "ANGLE";
+"preference.title.renderer.release.mg" = "MobileGlues";
 "preference.title.renderer.release.zink" = "Zink";
 
 "preference.title.renderer.debug.auto" = "Oto: gl4es ya da ANGLE";
 "preference.title.renderer.debug.gl4es" = "gl4es 1.1.4 - OpenGL 2.1 çıkarır";
 "preference.title.renderer.debug.angle" = "ANGLE (1.17+) - OpenGL 3.2 dışa aktarır (Çekirdek profili, kısıtlı)";
+"preference.title.renderer.debug.mg" = "MobileGlues (1.17+) - OpenGL 4.0'ı dışarıya aktarır, DENEYSEL";
 "preference.title.renderer.debug.zink" = "Zonk (Mesa 21.0) - OpenGL 4.1 çıkarır";
 
 "preference.detail.renderer" = "Kullanılacak OpenGL ișleme motorunu değiştirin. iOS 16 ve sonraki sürümlerde sorunları teşhis etmek amacıyla Zink geçici olarak devre dışı bırakılmıştır.";
@@ -256,6 +258,10 @@
 "preference.warn.allocated_memory" = "İşletim sisteminin kendisindeki kısıtlamalar nedeniyle bu seçenek bunda veya daha yüksek değerlerde dengesizliğe sebep olabilir. Dikkatle devam edin.";
 "preference.title.custom_env" = "Ortam Değişkenleri";
 "preference.detail.custom_env" = "Bu seçenek yapım aşamasında. Bu sırada custom_env.txt dosyası oluṣturup düzenleyin.";
+
+"preference.title.debug_universal_script_jit" = "Evrensel Stikdebug Betiğini kullan";
+"preference.title.debug_always_attached_jit" = "StikDebug'a bağlı kal";
+"preference.detail.debug_always_attached_jit" = "Eğer modlarınız .dylib'e ihtiyaç duyuyor ise bunu aktif edin. Bu aktif iken, StikDebug'ın PiP'i kesinlikle oynanırken kapatılmamalıdır. Evrensel Betiğin aktif olmasını gerektirir";
 "preference.title.debug_skip_wait_jit" = "\"JIT için bekleniliyor\" mesajını atla";
 "preference.detail.debug_skip_wait_jit" = "Bu JIT'siz başlatmanızı sağlamaz, aksine hata ayıklayıcı kontrolünü atlar, çünkü bu kontrol bazı belirli jailbreak'lerde başarısız oluyor.";
 "preference.title.debug_ipad_ui" = "iPadOS UI'ını aç";
