@@ -18,7 +18,7 @@
 
 // Version categories
 "Installed" = "설치됨";
-"Snapshot" = "스냅숏";
+"Snapshot" = "스냅샷";
 "Releases" = "릴리즈";
 "Unstable" = "불안정";
 "Old-beta" = "구 베타";
@@ -113,6 +113,28 @@
 "preference.profile.title.default_touch_control" = "터치 컨트롤";
 "preference.profile.title.default_gamepad_control" = "게임패드 컨트롤";
 "profile.section.instance" = "게임 인스턴스 설정";
+"controller_configurator.title.type.xbox" = "Xbox";
 "controller_configurator.title.type.playstation" = "PlayStation";
+
+"controller_configurator.xbox.title.bumper_left" = "좌측 범퍼";
+"controller_configurator.xbox.title.bumper_right" = "우측 범퍼";
+"controller_configurator.xbox.title.trigger_left" = "좌측 트리거";
+"controller_configurator.xbox.title.trigger_right" = "우측 트리거";
+
+"controller_configurator.playstation.title.bumper_left" = "L1";
+"controller_configurator.playstation.title.bumper_right" = "R1";
+"controller_configurator.playstation.title.trigger_left" = "L2";
+"controller_configurator.playstation.title.trigger_right" = "R2";
 "controller_configurator.playstation.title.named_back" = "선택";
+"controller_configurator.playstation.title.named_a" = "십자가";
+"controller_configurator.playstation.title.named_b" = "원형";
+"controller_configurator.playstation.title.named_x" = "사각형";
+"controller_configurator.playstation.title.named_y" = "삼각형";
+"controller_configurator.playstation.title.thumb_left" = "L3";
+"controller_configurator.playstation.title.thumb_right" = "R3";
+
+"controller_configurator.section.config_files" = "현재 구성 파일";
+"controller_configurator.section.game_mappings" = "게임 매핑";
+"controller_configurator.section.menu_mappings" = "메뉴 매핑";
+"controller_configurator.section.controller_style" = "컨트롤러 종류";
 "controller_configurator.section.footer.controller_style" = "이 설정 화면에 표시되는 컨트롤러 버튼 이름을 변경합니다.";
