@@ -21,8 +21,8 @@
 "Snapshot" = "快照版";
 "Releases" = "正式版";
 "Unstable" = "不穩定";
-"Old-beta" = "遠古 beta 版";
-"Old-alpha" = "遠古 alpha 版";
+"Old-beta" = "遠古 Beta 版";
+"Old-alpha" = "遠古 Alpha 版";
 
 // Custom controls
 "Copy" = "複製";
@@ -31,9 +31,9 @@
 "Remove" = "移除";
 "Resize" = "調整大小";
 // Visibility
-"Always" = "始終顯示";
+"Always" = "永遠顯示";
 "In game" = "遊戲內";
-"In menu" = "菜單內";
+"In menu" = "選單內";
 
 "custom_controls.button_edit.forward_lock" = "前進鎖定";
 "custom_controls.button_edit.name" = "名稱";
@@ -48,7 +48,7 @@
 "custom_controls.button_edit.stroke_color" = "描邊顏色";
 "custom_controls.button_edit.corner_radius" = "圓角半徑 (%)";
 "custom_controls.button_edit.opacity" = "不透明度 (%)";
-"custom_controls.button_edit.visibility" = "可見性";
+"custom_controls.button_edit.visibility" = "可見度";
 
 "custom_controls.button_menu.add_subbutton" = "新增子按鈕";
 "custom_controls.control_menu.discard_changes" = "捨棄變更";
