@@ -133,7 +133,7 @@
 
 "preference.section.general" = "Загальні налаштування";
 "preference.section.video" = "Налаштування відео та звуку";
-"preference.section.footer.video" = "Автоматичне промальовування дозволяє Amethyst вибрати найкращий варіант на основі версії Minecraft. Зменшення роздільної здатности зменшує навантаження на ГП для кращої продуктивности.";
+"preference.section.footer.video" = "Автоматичне промальовування дозволяє Amethyst вибрати найкращий варіант на основі версії Minecraft. Зменшення роздільности зменшує навантаження на ГП для кращої продуктивности.";
 "preference.section.control" = "Налаштування керування";
 "preference.section.debug" = "Налаштування налагодження інтерфейсу";
 "preference.section.footer.debug" = "Окрім налагодження, ці параметри можуть бути корисними для користувацьких елементів керування. Можливо, вам слід перезапустити запускач, щоб зміни застосувалися.";
@@ -165,7 +165,7 @@
 "preference.title.done.reset_warnings" = "Усі попередження стерті.";
 
 "preference.title.reset_settings" = "Скинути налаштування";
-"preference.title.confirm.reset_settings" = "Це прибере всі ваші користувацькі налаштування, включаючи роздільну здатність, розмір кнопок та параметри Java.";
+"preference.title.confirm.reset_settings" = "Це прибере всі ваші користувацькі налаштування, включаючи роздільність, розмір кнопок та параметри Java.";
 "preference.title.done.reset_settings" = "Усі стандартні налаштування були відновлені.";
 
 "preference.title.erase_demo_data" = "Стерти дані демонстраційної гри";
@@ -188,8 +188,8 @@
 
 "preference.detail.renderer" = "Змініть механізм промальовування OpenGL для використання. Zink тимчасово вимкнено в iOS 16 і новіших версіях для діагностики проблем.";
 
-"preference.title.resolution" = "Роздільна здатність відео (%)";
-"preference.detail.resolution" = "Дозволяє вам зменшити роздільну здатність гри.";
+"preference.title.resolution" = "Роздільність відео (%)";
+"preference.detail.resolution" = "Дозволяє вам зменшити роздільність гри.";
 "preference.title.max_framerate" = "Максимальна частота кадрів";
 "preference.detail.max_framerate" = "Дозволяє вам обмежити частоту кадрів в грі до 60 FPS на ProMotion дисплеях.";
 
