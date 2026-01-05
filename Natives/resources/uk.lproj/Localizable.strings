@@ -259,9 +259,7 @@
 "preference.title.custom_env" = "Змінні середовища";
 "preference.detail.custom_env" = "Ця опція наразі розробляється. Створіть та відредагуйте custom_env.txt в той час.";
 
-"preference.title.debug_universal_script_jit" = "Універсальний скрипт StikDebug";
 "preference.title.debug_always_attached_jit" = "Залишайтеся приєднаними до StikDebug";
-"preference.detail.debug_always_attached_jit" = "Увімкніть це, якщо ваші моди потребують завантаження .dylib під час виконання. Якщо ввімкнено, PiP StikDebug не має закриватися під час гри. Потрібен універсальний скрипт";
 "preference.title.debug_skip_wait_jit" = "Пропустити «Очікування JIT»";
 "preference.detail.debug_skip_wait_jit" = "Це не дозволяє запускати без JIT, натомість це пропускає перевірку налагоджувача, оскільки перевірка не вдається під час певних джейлбрейків.";
 "preference.title.debug_ipad_ui" = "Розблокувати інтерфейс iPadOS";
