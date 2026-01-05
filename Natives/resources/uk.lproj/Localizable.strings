@@ -5,7 +5,7 @@
 
 "game.menu.force_close" = "Примусове закриття";
 "game.menu.confirm.force_close" = "Ви впевнені, що ви хочете примусово закрити його?";
-"game.menu.log_output" = "Журнал";
+"game.menu.log_output" = "Вивід журналу";
 "game.menu.custom_controls" = "Користувацьке керування";
 
 "game.note.airplay" = "Minecraft показується в дзеркальному дисплеї AirPlay";
@@ -86,7 +86,7 @@
 "login.alert.field.username" = "Ім'я гравця";
 
 "login.jit.checking" = "Перевірка JIT";
-"login.jit.enabled" = "JIT було увімкнено";
+"login.jit.enabled" = "JIT було ввімкнено";
 "login.jit.fail" = "JIT не може бути активований.";
 "login.jit.fail.title" = "JIT не може бути активований на вашому пристрої.";
 "login.jit.fail.description" = "Жодна інтеграція не може бути використана для автоматичного включення JIT на вашому пристрої, і тепер воно має бути увімкнене вручну. Помилки записані в latestlog.txt.";
@@ -109,8 +109,8 @@
 "login.warn.title.ios19_jitdead" = "Amethyst не підтримується на iOS 26 та нижче.";
 "login.warn.message.ios19_jitdead" = "Через зміни в iOS, які перешкоджають увімкненню JIT, Amethyst не може працювати в поточному стані та потребує ретельного дослідження, щоб знайти новий шлях.\n\nНатиснувши OK, програма закриється.";
 
-"login.warn.title.demomode" = "Ваш обліковий запис демонстраційний";
-"login.warn.message.demomode" = "Як заміна в офлайн та локальний режимах, демо-режим дозволить вам увійти в обліковий запис Microsoft, який не володіє грою та грати в пробну версію Java Edition, введено в 1.3.1 і більш нових версій. Старіші версії містять повну версію гри, оскільки офіційний запускач не веде ці обмеження. Відвідайте наш веб-сайт, щоб дізнатися більше про цей перехід з автономного режиму.";
+"login.warn.title.demomode" = "Ваш обліковий запис демо";
+"login.warn.message.demomode" = "Як заміна поза мережею та локальний режимах, демо-режим дозволить вам увійти в обліковий запис Microsoft, який не володіє грою та грати в пробну версію Java Edition, введено в 1.3.1 і більш нових версій. Старіші версії містять повну версію гри, оскільки офіційний запускач не веде ці обмеження. Відвідайте наш веб-сайт, щоб дізнатися більше про цей перехід з автономного режиму.";
 
 "login.warn.title.localmode" = "Офлайн режим тепер локальний режим.";
 "login.warn.message.localmode" = "Ви можете продовжувати грати у встановлені версії, але ви більше не можете завантажити Minecraft без ліцензованого облікового запису. Підтримка не надаватиметься щодо проблем із локальними обліковими записами чи іншими способами придбання Minecraft.";
@@ -138,7 +138,7 @@
 "preference.section.debug" = "Налаштування налагодження інтерфейсу";
 "preference.section.footer.debug" = "Окрім налагодження, ці параметри можуть бути корисними для користувацьких елементів керування. Можливо, вам слід перезапустити запускач, щоб зміни застосувалися.";
 //"preference.section.footer.control" = "";
-"preference.section.java" = "Оптимізація Java";
+"preference.section.java" = "Налаштування Java";
 //"preference.section.footer.java" = "";
 
 "preference.title.confirm" = "Ви впевнені?";
@@ -153,24 +153,24 @@
 "preference.detail.cosmetica" = "Уключає плащі від Cosmetica (раніше Arc). Для більш детальної інформації, будь ласка, відвідайте https://cosmetica.cc. Потребує OptiFine";
 "preference.title.debug_logging" = "Запис помилок";
 "preference.detail.debug_logging" = "Записує внутрішні налаштування і дії на latestlog.txt. Це допомагає розробникам швидше знаходити проблеми, але Minecraft може працювати повільніше, оскільки журнали пишуться часто.";
-"preference.title.appicon" = "Встановити іконку додатка";
+"preference.title.appicon" = "Установити значок додатка";
 "preference.detail.appicon" = "Дозволяє обрати різні значки основного екрана для Amethyst.";
 "preference.title.appicon-default" = "Знайоме світле Amethyst";
 "preference.title.appicon-dark" = "Знайоме темне Amethyst";
 "preference.title.appicon-development" = "Планова розробка";
 "preference.title.hidden_sidebar" = "Сховати основну панель меню усталено";
-"preference.detail.hidden_sidebar" = "Дозволяє приховати бічну панель у головному меню усталено і під час обертання.";
+"preference.detail.hidden_sidebar" = "Дозволяє приховати бокову панель у головному меню усталено і під час обертання.";
 
 "preference.title.reset_warnings" = "Стерти всі попередження";
 "preference.title.done.reset_warnings" = "Усі попередження стерті.";
 
 "preference.title.reset_settings" = "Скинути налаштування";
 "preference.title.confirm.reset_settings" = "Це прибере всі ваші користувацькі налаштування, включаючи роздільність, розмір кнопок та параметри Java.";
-"preference.title.done.reset_settings" = "Усі стандартні налаштування були відновлені.";
+"preference.title.done.reset_settings" = "Усі усталені налаштування були відновлені.";
 
 "preference.title.erase_demo_data" = "Стерти дані демонстраційної гри";
 "preference.title.confirm.erase_demo_data" = "Це знищить всі демоверсії гри та дані, що використовуються для тимчасових облікових записів.";
-"preference.title.done.erase_demo_data" = "Всі дані демонстраційної гри були видалені.";
+"preference.title.done.erase_demo_data" = "Усі дані демонстраційної гри були видалені.";
 
 "preference.title.renderer" = "Промальовування";
 
@@ -181,8 +181,8 @@
 "preference.title.renderer.release.zink" = "Zink";
 
 "preference.title.renderer.debug.auto" = "Авто: gl4 або ANGLE";
-"preference.title.renderer.debug.gl4es" = "Gl4es 1.1.4 — експортує OpenGL 2.1";
-"preference.title.renderer.debug.angle" = "ANGLE (1.17+) - експортує OpenGL 3.2 (Базовий профіль, обмежений)";
+"preference.title.renderer.debug.gl4es" = "holy gl4es — експортує OpenGL 2.1";
+"preference.title.renderer.debug.angle" = "ANGLE (1.17+) — експортує OpenGL 3.2 (Базовий профіль, обмежений)";
 "preference.title.renderer.debug.mg" = "MobileGlues (1.17+) — експорт OpenGL 4.0, ЕКПЕРИМЕНТАЛЬНО";
 "preference.title.renderer.debug.zink" = "Zink (Mesa 21.0) — експортує OpenGL 4.1";
 
@@ -204,7 +204,7 @@
 "preference.detail.silence_with_switch" = "Увімкніть, щоб вимкнути звук, якщо ввімкнено беззвучний режим. Навушники та зовнішні динаміки не впливають на це.";
 "preference.title.allow_microphone" = "Дозволити ввід мікрофона";
 "preference.detail.allow_microphone" = "Увімкніть це, лише якщо ви використовуєте мод голосового чату. Параметр беззвучного перемикання буде проігнорований, і це вплине на якість звуку з інших програм.";
-"preference.title.default_gamepad_ctrl" = "Налаштування контроллера";
+"preference.title.default_gamepad_ctrl" = "Налаштування контролера";
 "preference.title.hardware_hide" = "Приховати елементи керування, коли апаратне забезпечення під'єднано";
 "preference.detail.hardware_hide" = "Увімкніть поведінку автоматичного вимкнення накладання елементів керування на екрані, коли під'єднано мишу або ігровий контролер.";
 "preference.title.recording_hide" = "Приховати елементи керування від запису екрана";
@@ -260,6 +260,7 @@
 "preference.detail.custom_env" = "Ця опція наразі розробляється. Створіть та відредагуйте custom_env.txt в той час.";
 
 "preference.title.debug_always_attached_jit" = "Залишайтеся приєднаними до StikDebug";
+"preference.detail.debug_always_attached_jit" = "Увімкніть це, якщо ваші моди потребують завантаження .dylib під час виконання. Якщо ввімкнено, PiP StikDebug не має закриватися під час гри.";
 "preference.title.debug_skip_wait_jit" = "Пропустити «Очікування JIT»";
 "preference.detail.debug_skip_wait_jit" = "Це не дозволяє запускати без JIT, натомість це пропускає перевірку налагоджувача, оскільки перевірка не вдається під час певних джейлбрейків.";
 "preference.title.debug_ipad_ui" = "Розблокувати інтерфейс iPadOS";
@@ -325,9 +326,9 @@
 "controller_configurator.playstation.title.thumb_right" = "R3";
 
 "controller_configurator.section.config_files" = "Файл поточних налаштувань";
-"controller_configurator.section.game_mappings" = "Мапування гри";
+"controller_configurator.section.game_mappings" = "Призначення гри";
 "controller_configurator.section.footer.game_mappings" = "Прив'язки, коли миша заблокована в грі.";
-"controller_configurator.section.menu_mappings" = "Мапування меню";
-"controller_configurator.section.footer.menu_mappings" = "Прив’язки, коли миша не заблокована, наприклад, на екрані заголовка або в меню паузи.";
+"controller_configurator.section.menu_mappings" = "Призначення меню";
+"controller_configurator.section.footer.menu_mappings" = "Прив’язки, коли миша не заблокована, наприклад, на екрані заголовка або в меню павзи.";
 "controller_configurator.section.controller_style" = "Тип контролера";
 "controller_configurator.section.footer.controller_style" = "Показувати різні назви кнопок контролера в цьому налаштовувачі.";
