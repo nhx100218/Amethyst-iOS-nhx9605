@@ -259,9 +259,7 @@
 "preference.title.custom_env" = "Pembolehubah persekitaran";
 "preference.detail.custom_env" = "Pilihan ini sedang dalam pembinaan. Cipta dan sunting custom_env.txt buat sementara ini.";
 
-"preference.title.debug_universal_script_jit" = "Gunakan Skrip StikDebug Sejagat";
 "preference.title.debug_always_attached_jit" = "Kekalkan terpasang pada StikDebug";
-"preference.detail.debug_always_attached_jit" = "Dayakan ini jika mod anda memerlukan pemuatan .dylib semasa masa jalan. Apabila ini dihidupkan, PiP StikDebug tidak sepatutnya ditutup semasa permainan. Skrip Universal perlu didayakan";
 "preference.title.debug_skip_wait_jit" = "Langkau dialog \"Menunggu JIT\"";
 "preference.detail.debug_skip_wait_jit" = "Ini tidak membenarkan anda melancarkan tanpa JIT, sebaliknya ini melangkau semakan penyahpepijat, kerana semakan ini gagal pada jailbreak tertentu.";
 "preference.title.debug_ipad_ui" = "Buka kunci UI iPadOS";
