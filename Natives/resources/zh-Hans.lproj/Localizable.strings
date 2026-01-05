@@ -259,9 +259,7 @@
 "preference.title.custom_env" = "环境变量";
 "preference.detail.custom_env" = "此选项正在构建中。请在此期间创建并编辑 custom_env.txt 文件。";
 
-"preference.title.debug_universal_script_jit" = "使用通用 StikDebug 脚本";
 "preference.title.debug_always_attached_jit" = "保持连接到 StikDebug";
-"preference.detail.debug_always_attached_jit" = "若你的模组需要在运行环境加载 .dylib，可启用此项。启用后，StikDebug 的画中画功能在游戏过程中不会关闭。需要启用通用脚本";
 "preference.title.debug_skip_wait_jit" = "跳过“请等待应用获取到 JIT 权限”对话框";
 "preference.detail.debug_skip_wait_jit" = "这并不是让您在没有 JIT 权限的情况下启动，而是跳过调试器检查，因为在某些越狱设备上会检查失败。";
 "preference.title.debug_ipad_ui" = "解锁 iPadOS 界面";
