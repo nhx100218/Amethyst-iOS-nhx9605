@@ -34,6 +34,8 @@
 "Always" = "Siempre";
 "In game" = "En el juego";
 "In menu" = "En el menú";
+
+"custom_controls.button_edit.forward_lock" = "Soycubo";
 "custom_controls.button_edit.name" = "Nombre";
 "custom_controls.button_edit.size" = "Tamaño";
 "custom_controls.button_edit.mapping" = "Mapeado";
