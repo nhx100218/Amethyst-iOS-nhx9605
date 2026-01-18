@@ -41,6 +41,7 @@
 "custom_controls.button_edit.mapping" = "Mappatura";
 "custom_controls.button_edit.orientation" = "Orientamento";
 "custom_controls.button_edit.toggleable" = "Attivabile";
+"custom_controls.button_edit.mouse_pass" = "Passaggio del mouse";
 "custom_controls.button_edit.swipeable" = "Swipeabile";
 "custom_controls.button_edit.bg_color" = "Colore di sfondo";
 "custom_controls.button_edit.stroke_width" = "Spessore tratto (dp)";
@@ -100,6 +101,12 @@
 "login.option.local" = "Account locale";
 
 "login.warn.title.legacy_device" = "La prossima versione di Amethyst non sarà compatibile con questo dispositivo.";
+"login.warn.message.legacy_device" = "Per eseguire la prossima major release, è necessario un dispositivo in grado di eseguire iOS 14.";
+"login.warn.title.legacy_ios" = "La prossima versione di Amethyst richiederà un aggiornamento del sistema.";
+"login.warn.message.legacy_ios" = "Per eseguire la prossima major release, è necessario iOS 14 o successivo su questo dispositivo.";
+"login.warn.title.limited_ram" = "Questo dispositivo ha una quantità limitata di memoria disponibile.";
+"login.warn.message.limited_ram" = "Si consiglia di lasciare la RAM automatica abilitata per evitare problemi d'instabilità e prestazioni.";
+"login.warn.title.ios19_jitdead" = "Amethyst non è supportato su iOS 26 o versioni successive.";
 "login.warn.message.demomode" = "In sostituzione di modalità offline e locale, la modalità demo vi permetterà di accedere ad un account Microsoft che non possiede il gioco e giocare la prova Java Edition, introdotto successivamente alla 1.3. Le versioni più vecchie contengono il gioco completo, poiché il launcher ufficiale non pone queste restrizioni. Visita il nostro sito web per saperne di più su questa transizione dalla modalità offline.";
 
 "login.warn.title.localmode" = "La modalità offline è ora modalità locale.";
