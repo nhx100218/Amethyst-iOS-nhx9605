@@ -201,6 +201,7 @@ der Minecraft-Version zu wählen. Verringerte Auflösung reduziert die Arbeitsla
 "preference.detail.silence_other_audio" = "Aktiviere diese Option um Amethyst zu erlauben, Audio von anderen Apps wie Musik zu pausieren, wenn das Spiel gestartet wird.";
 "preference.title.silence_with_switch" = "Audio mit Lautlos-Schalter deaktivieren";
 "preference.detail.silence_with_switch" = "Aktivieren, um Audio zu deaktivieren, wenn der Lautlos-Modus aktiviert ist. Kopfhörer und externe Lautsprecher sind nicht betroffen.";
+"preference.title.allow_microphone" = "Mikrofoneingabe erlauben";
 "preference.title.default_gamepad_ctrl" = "Steuerungs-Konfiguration";
 "preference.title.hardware_hide" = "Steuerelemente ausblenden, wenn Hardware verbunden ist";
 "preference.detail.hardware_hide" = "Aktivieren Sie die automatische Deaktivierung des Overlays auf dem Bildschirm, wenn eine Maus oder ein Game-Controller angeschlossen ist.";
@@ -227,12 +228,18 @@ der Minecraft-Version zu wählen. Verringerte Auflösung reduziert die Arbeitsla
 "preference.detail.gyroscope_invert_x_axis" = "Wechselt die X-Achse des Gyroskops";
 "preference.title.gyroscope_sensitivity" = "Gyroskop-Steuerungs-Empfindlichkeit";
 "preference.detail.gyroscope_sensitivity" = "Passe die Empfindlichkeit der Gyroskop-Steuerung an";
+
+"preference.title.manage_runtime" = "Laufzeiten verwalten";
+"preference.title.confirm.delete_runtime" = "%@ wird gelöscht";
+"preference.manage_runtime.header.default" = "Bevorzugte Java-Version";
 "preference.manage_runtime.footer.java17" = "Dies ist die Standardversion für Minecraft 1,17 und neuer.";
+"preference.manage_runtime.header.invalid" = "Ungültige Laufzeiten";
 
 "preference.title.java_args" = "JVM-Start-Argumente";
 "preference.detail.java_args" = "Argumente an Java übergeben, wenn Minecraft gestartet wird. Sei vorsichtig, dies kann den Absturz des Spiels verursachen, wenn es falsch geändert wird.";
 "preference.placeholder.java_args" = "Argumente angeben...";
 "preference.detail.env_variables" = "Benutzerdefinierte Umgebungsvariablen beim Starten von Minecraft festlegen. Vorsicht, falsche Änderungen können zu Spielabstürzen führen.";
+"preference.placeholder.env_variables" = "Variablen angeben...";
 "preference.title.auto_ram" = "Auto-RAM";
 "preference.detail.auto_ram" = "Aktiviert automatische RAM-Einstellungen";
 "preference.warn.auto_ram" = "Das Deaktivieren dieser Option kann auf einem nicht-ge-jailbreakten Gerät Instabilität erzeugen. Sei vorsichtig.";
@@ -250,9 +257,23 @@ der Minecraft-Version zu wählen. Verringerte Auflösung reduziert die Arbeitsla
 "preference.detail.debug_hide_home_indicator" = "Dadurch wird die Sperre des Home-Indikators deaktiviert. Du musst den Guided-Access verwenden, um den Home-Indikator gleichzeitig auszublenden und zu sperren.";
 
 "preference.profile.title.name" = "Namen";
+"preference.profile.title.loader_type" = "Typ des Loaders";
+"preference.profile.title.loader_vendor" = "Anbieter des Loaders";
+"preference.profile.title.loader_version" = "Version des Loaders";
+"preference.profile.title.version" = "Version";
+"preference.profile.title.version_type" = "Versionstyp";
+"preference.profile.title.default_touch_control" = "Touch-Steuerung";
+"preference.profile.title.default_gamepad_control" = "Gamepad-Steuerung";
+
+"profile.error.name_exists" = "Ein Profil mit diesem Namen existiert bereits. Bitte verwende einen anderen Namen.";
+"profile.section.instance" = "Spielinstanz-Einstellungen";
+"profile.section.profiles" = "Profile in dieser Instanz";
+"profile.title.create" = "Neues Profil erstellen";
+"profile.title.install_fabric_quilt" = "Fabric/Quilt installieren";
 
 "controller_configurator.title.current" = "Gamepads Konfigurationsdatei";
 "controller_configurator.title.type.xbox" = "XBox";
+"controller_configurator.title.type.playstation" = "PlayStation";
 
 "controller_configurator.xbox.title.bumper_left" = "Linker Stoß";
 "controller_configurator.xbox.title.bumper_right" = "Rechter Stoß";
@@ -260,12 +281,21 @@ der Minecraft-Version zu wählen. Verringerte Auflösung reduziert die Arbeitsla
 "controller_configurator.xbox.title.trigger_right" = "Rechter Auslöser";
 "controller_configurator.xbox.title.named_back" = "Anleitung";
 "controller_configurator.xbox.title.named_start" = "Menü";
+"controller_configurator.xbox.title.named_a" = "A";
+"controller_configurator.xbox.title.named_b" = "B";
+"controller_configurator.xbox.title.named_x" = "X";
+"controller_configurator.xbox.title.named_y" = "Y";
 "controller_configurator.xbox.title.dpad_up" = "Hoch";
 "controller_configurator.xbox.title.dpad_down" = "Unten";
 "controller_configurator.xbox.title.dpad_left" = "Links";
 "controller_configurator.xbox.title.dpad_right" = "Rechts";
 "controller_configurator.xbox.title.thumb_left" = "Linksklick";
 "controller_configurator.xbox.title.thumb_right" = "Rechtsklick";
+
+"controller_configurator.playstation.title.bumper_left" = "L1";
+"controller_configurator.playstation.title.bumper_right" = "R1";
+"controller_configurator.playstation.title.trigger_left" = "L2";
+"controller_configurator.playstation.title.trigger_right" = "R2";
 "controller_configurator.playstation.title.named_back" = "Auswählen";
 "controller_configurator.playstation.title.named_start" = "Start";
 "controller_configurator.playstation.title.named_a" = "Kreuz";
@@ -276,6 +306,8 @@ der Minecraft-Version zu wählen. Verringerte Auflösung reduziert die Arbeitsla
 "controller_configurator.playstation.title.dpad_down" = "Unten";
 "controller_configurator.playstation.title.dpad_left" = "Links";
 "controller_configurator.playstation.title.dpad_right" = "Rechts";
+"controller_configurator.playstation.title.thumb_left" = "L3";
+"controller_configurator.playstation.title.thumb_right" = "R3";
 
 "controller_configurator.section.config_files" = "Aktuelle Konfiguration";
 "controller_configurator.section.game_mappings" = "Spielzuordnung";
