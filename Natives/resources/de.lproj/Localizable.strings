@@ -34,6 +34,8 @@
 "Always" = "Immer";
 "In game" = "Im Spiel";
 "In menu" = "Im Menü";
+
+"custom_controls.button_edit.forward_lock" = "Vorwärts-Sperre";
 "custom_controls.button_edit.name" = "Namen";
 "custom_controls.button_edit.size" = "Größe";
 "custom_controls.button_edit.mapping" = "Zuordnung";
@@ -205,6 +207,7 @@ der Minecraft-Version zu wählen. Verringerte Auflösung reduziert die Arbeitsla
 "preference.title.default_gamepad_ctrl" = "Steuerungs-Konfiguration";
 "preference.title.hardware_hide" = "Steuerelemente ausblenden, wenn Hardware verbunden ist";
 "preference.detail.hardware_hide" = "Aktivieren Sie die automatische Deaktivierung des Overlays auf dem Bildschirm, wenn eine Maus oder ein Game-Controller angeschlossen ist.";
+"preference.title.recording_hide" = "Steuerelemente von Bildschirmaufnahme ausblenden";
 "preference.title.gesture_mouse" = "Mausgesten";
 "preference.detail.gesture_mouse" = "Ermöglicht Gesten wie Tippen zum Platzieren des Blocks, halten um den Block abzubauen, mit 2 Fingern zu scrollen";
 "preference.title.gesture_hotbar" = "Hotbar Gesten";
