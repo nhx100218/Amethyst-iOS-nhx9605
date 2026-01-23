@@ -14,7 +14,7 @@
 
 // The play button
 "Play" = "启动游戏";
-"Details" = "详细信息";
+"Details" = "Details";
 
 // Version categories
 "Installed" = "已安装";
@@ -31,7 +31,7 @@
 "Remove" = "移除";
 "Resize" = "调整大小";
 // Visibility
-"Always" = "始终显示";
+"Always" = "Always";
 "In game" = "游戏内";
 "In menu" = "菜单内";
 
@@ -88,7 +88,7 @@
 "login.jit.checking" = "正在检查是否开启 JIT 权限";
 "login.jit.enabled" = "JIT 权限已启用";
 "login.jit.fail" = "无法启用 JIT 权限。";
-"login.jit.fail.title" = "无法在您的设备上启用 JIT。";
+"login.jit.fail.title" = "无法在您的设备上启用 JIT 权限。";
 "login.jit.fail.description" = "没有集成可在您的设备上自动启用 JIT，现在需要手动启用。错误已记录到 latestlog.txt。";
 "login.jit.fail.description_unsupported" = "检测到了不受支持的安装方法。请使用受支持的方法重新安装。";
 
