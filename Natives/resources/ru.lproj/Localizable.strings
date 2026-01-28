@@ -18,7 +18,7 @@
 
 // Version categories
 "Installed" = "Установлено";
-"Snapshot" = "Снапшоты";
+"Snapshot" = "Снапшот";
 "Releases" = "Релизы";
 "Unstable" = "Нестабильно";
 "Old-beta" = "Старые бета";
@@ -177,6 +177,7 @@
 "preference.title.renderer.release.auto" = "Авто";
 "preference.title.renderer.release.gl4es" = "holy gl4es";
 "preference.title.renderer.release.angle" = "ANGLE";
+"preference.title.renderer.release.mg" = "MobileGlues";
 "preference.title.renderer.release.zink" = "Zink";
 
 "preference.title.renderer.debug.auto" = "Авто: gl4es или ANGLE";
@@ -256,6 +257,8 @@
 "preference.warn.allocated_memory" = "Из-за ограничений операционной системы может вызвать нестабильность при этом и более высоких значениях. Используйте с осторожностью.";
 "preference.title.custom_env" = "Переменные окружения";
 "preference.detail.custom_env" = "Эта функция ещё в разработке. Пока что вручную создайте и отредактируйте файл custom_env.txt.";
+
+"preference.title.debug_always_attached_jit" = "Оставайтесь подключенными к StikDebug";
 "preference.title.debug_skip_wait_jit" = "Пропускать этап ожидания JIT";
 "preference.detail.debug_skip_wait_jit" = "Без JIT это запускать игру не позволит, однако исправит ошибку запуска на некоторых устройствах с jailbreak за счёт пропуска проверки отладчика.";
 "preference.title.debug_ipad_ui" = "Разблокировать интерфейс iPadOS";
