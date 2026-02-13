@@ -175,12 +175,14 @@
 "preference.title.renderer.debug.auto" = "Auto: gl4es ou ANGLE";
 "preference.title.renderer.debug.gl4es" = "gl4es 1.1.4 - exporte OpenGL 2.1";
 "preference.title.renderer.debug.angle" = "ANGLE (1.17+) - exporte OpenGL 3.2 (Profil de base, Limité)";
+"preference.title.renderer.debug.mg" = "MobileGlues (1.17+) - exporte OpenGL 4.0, EXPERIMENTAL";
 "preference.title.renderer.debug.zink" = "Zink (Mesa 21.0) - exporte OpenGL 4.1";
 
 "preference.detail.renderer" = "Changer le moteur de rendu OpenGL à utiliser";
 
 "preference.title.resolution" = "Résolution (%)";
 "preference.detail.resolution" = "Vous permet de diminuer la résolution du jeu.";
+"preference.title.max_framerate" = "Framerate maximum";
 
 "preference.title.fullscreen_airplay" = "AirPlay en plein écran";
 "preference.detail.fullscreen_airplay" = "Permet d'afficher une fenêtre de jeu en plein écran sur l'écran externe plutôt que de tout copier sur l'écran.";
@@ -218,4 +220,13 @@
 "preference.detail.debug_hide_home_indicator" = "Ceci désactivera le verrouillage de l'indicateur d'accueil. Vous devrez utiliser un accès guidé pour masquer et verrouiller l'indicateur d'accueil en même temps.";
 
 "preference.profile.title.name" = "Nom";
+"preference.profile.title.version" = "Version";
+"preference.profile.title.version_type" = "Type de version";
+"preference.profile.title.default_gamepad_control" = "Commandes de la manette";
+
+"profile.error.name_exists" = "Un profil avec ce nom existe déjà. Veuillez utiliser un autre nom.";
+"profile.section.instance" = "Paramètres de l'instance du jeu";
+"profile.section.profiles" = "Profils dans cette instance";
+"profile.title.create" = "Créer un nouveau profil";
+"profile.title.separate_preference" = "Isoler les paramètres";
 "controller_configurator.playstation.title.named_back" = "Sélectionner";
