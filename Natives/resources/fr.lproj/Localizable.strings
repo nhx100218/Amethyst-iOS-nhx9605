@@ -14,10 +14,13 @@
 
 // The play button
 "Play" = "Jouer";
+"Details" = "Détails";
 
 // Version categories
 "Installed" = "Installés";
+"Snapshot" = "Snapshot";
 "Releases" = "Versions publiques";
+"Unstable" = "Instable";
 "Old-beta" = "Bêta";
 "Old-alpha" = "Alpha";
 
@@ -27,8 +30,16 @@
 "Move" = "Déplacer";
 "Remove" = "Supprimer";
 "Resize" = "Redimensionner";
+// Visibility
+"Always" = "Toujours";
+"In game" = "En jeu";
+"In menu" = "Dans le menu";
+
+"custom_controls.button_edit.forward_lock" = "Transfert verrouillé";
 "custom_controls.button_edit.name" = "Nom";
 "custom_controls.button_edit.size" = "Taille";
+"custom_controls.button_edit.mapping" = "Mappage";
+"custom_controls.button_edit.orientation" = "Orientation";
 "custom_controls.button_edit.toggleable" = "Basculable";
 "custom_controls.button_edit.mouse_pass" = "Passage de la souris";
 "custom_controls.button_edit.swipeable" = "Balayable";
@@ -37,6 +48,7 @@
 "custom_controls.button_edit.stroke_color" = "Couleur du contour";
 "custom_controls.button_edit.corner_radius" = "Rayon des coins (%)";
 "custom_controls.button_edit.opacity" = "Opacité (%)";
+"custom_controls.button_edit.visibility" = "Visibilité";
 
 "custom_controls.button_menu.add_subbutton" = "Ajouter un sous-bouton";
 "custom_controls.control_menu.discard_changes" = "Ignorer les modifications";
@@ -50,15 +62,21 @@
 "custom_controls.control_menu.safe_area" = "Zone de sécurité";
 "custom_controls.control_menu.add_button" = "Ajouter un bouton";
 "custom_controls.control_menu.add_drawer" = "Ajouter un tiroir";
+"custom_controls.control_menu.add_joystick" = "Ajouter un joystick";
 "custom_controls.error.incompatible" = "Cette version de contrôle (code %d) n'est pas implémentée dans cette version du launcher.";
 "custom_controls.hint" = "Appuyez longuement n'importe où sur l'écran pour plus d'options";
 
 "init.migrateDir" = "Le répertoire de données Amethyst est maintenant %@. Toutes vos données existantes ont été déplacées vers le nouvel emplacement.";
 
+"launcher.mcl.downloading_file" = "Téléchargement de %@";
+"launcher.mcl.error_download" = "Échec du téléchargement de %@: %@";
+
 "launcher.menu.custom_controls" = "Contrôles personnalisés";
+"launcher.menu.execute_jar" = "Exécuter .jar";
 
 "launcher.wait_jit.title" = "Attente du JIT";
 "launcher.wait_jit.message" = "Amethyst s'appuie sur la compilation Just-in-time pour que Java fonctionne avec des performances maximales.";
+"launcher.wait_jit_trollstore.message" = "Si vous voyez toujours ce message, veuillez activer le schéma d'URL dans TrollStore.";
 
 "login.error.username.outOfRange" = "Le nom d'utilisateur doit comporter au moins 3 caractères et 16 caractères maximum";
 
@@ -66,13 +84,25 @@
 
 "login.jit.checking" = "Recherche du JIT";
 "login.jit.enabled" = "Le JIT a été activé";
+"login.jit.fail" = "JIT n'a pas pu être activé.";
+"login.jit.fail.title" = "JIT n'a pas pu être activé sur votre appareil.";
+"login.jit.fail.description" = "Aucune intégration n'a pu être utilisée pour activer JIT automatiquement sur votre appareil, et elle doit maintenant être activée manuellement. Des erreurs ont été enregistrées sur latestlog.txt.";
+"login.jit.fail.description_unsupported" = "Une méthode d'installation non prise en charge a été détectée. Veuillez la réinstaller en utilisant l'une des méthodes supportées.";
 
 // Login buttons
 "login.menu.sendlogs" = "Envoyez vos journaux";
 "login.option.add" = "Ajouter un compte";
 "login.option.select" = "Choisir un compte";
+"login.option.demo" = "Compte démo";
 "login.option.microsoft" = "Compte Microsoft";
 "login.option.local" = "Compte local";
+
+"login.warn.title.legacy_device" = "La prochaine version d'Améthyst ne sera pas compatible avec cet appareil.";
+"login.warn.message.legacy_device" = "Pour exécuter la prochaine version majeure, un appareil capable d'exécuter iOS 14 est nécessaire.";
+"login.warn.title.legacy_ios" = "La prochaine version d'Amethyst nécessitera une mise à jour du système.";
+"login.warn.title.limited_ram" = "Cet appareil a une quantité limitée de mémoire disponible.";
+"login.warn.message.limited_ram" = "Nous vous recommandons de laisser la mémoire vive automatique activée pour éviter des problèmes d'instabilité et de performance.";
+"login.warn.title.ios19_jitdead" = "L'améthyste n'est pas pris en charge sur iOS 26 ou supérieur.";
 
 "login.warn.title.demomode" = "Votre compte est une démo";
 "login.warn.message.demomode" = "En remplacement du mode hors ligne et local, le mode démo vous permettra de vous connecter à un compte Microsoft qui ne possède pas le jeu et de jouer à l'essai de l'édition Java, introduit dans la version 1.3. Les versions plus anciennes contiennent le jeu complet puisque le launcher officiel ne place pas ces restrictions. Consultez notre site pour en savoir plus sur cette transition du mode hors ligne.";
@@ -92,6 +122,7 @@
 "login.msa.progress.checkMCProfile" = "(5/5) Vérification du profil Minecraft";
 
 "News" = "Actualités";
+"Profiles" = "Profils";
 "Settings" = "Paramètres";
 
 "preference.section.general" = "Paramètres généraux";
@@ -119,6 +150,7 @@
 "preference.detail.appicon" = "Vous permet de choisir entre différentes icônes d'écran d'accueil pour Amethyst.";
 "preference.title.appicon-default" = "Amethyst clair familier";
 "preference.title.appicon-dark" = "Amethyst sombre familier";
+"preference.title.appicon-development" = "Développement Pencillé";
 "preference.title.hidden_sidebar" = "Masquer la barre latérale du menu principal par défaut";
 "preference.detail.hidden_sidebar" = "Vous permet de masquer la barre latérale dans le menu principal par défaut et lors de la rotation sur iOS 14 et plus récent.";
 
@@ -129,7 +161,16 @@
 "preference.title.confirm.reset_settings" = "Ceci supprimera toutes vos préférences personnalisées, y compris la résolution, la taille des boutons et les arguments Java.";
 "preference.title.done.reset_settings" = "Tous les paramètres par défaut ont été restaurés.";
 
+"preference.title.erase_demo_data" = "Effacer les données du jeu de démo";
+"preference.title.done.erase_demo_data" = "Toutes les données du jeu de démo ont été effacées.";
+
 "preference.title.renderer" = "Moteur de rendu";
+
+"preference.title.renderer.release.auto" = "Auto";
+"preference.title.renderer.release.gl4es" = "holy gl4es";
+"preference.title.renderer.release.angle" = "ANGLE";
+"preference.title.renderer.release.mg" = "MobileGlues";
+"preference.title.renderer.release.zink" = "Zink";
 
 "preference.title.renderer.debug.auto" = "Auto: gl4es ou ANGLE";
 "preference.title.renderer.debug.gl4es" = "gl4es 1.1.4 - exporte OpenGL 2.1";
