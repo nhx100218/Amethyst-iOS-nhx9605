@@ -17,7 +17,6 @@
 #import "UIKit+hook.h"
 #import "ios_uikit_bridge.h"
 #import "utils.h"
-#import "installer/modpack/ModrinthAPI.h"
 
 #include <sys/time.h>
 
@@ -30,8 +29,11 @@ static void *ProgressObserverContext = &ProgressObserverContext;
 
 @property(nonatomic) MinecraftResourceDownloadTask* task;
 @property(nonatomic) DownloadProgressViewController* progressVC;
+@property(nonatomic) NSArray* globalToolbarItems;
 @property(nonatomic) PLPickerView* versionPickerView;
 @property(nonatomic) UITextField* versionTextField;
+@property(nonatomic) UIButton* buttonInstall;
+@property(nonatomic) UIBarButtonItem* buttonInstallItem;
 @property(nonatomic) int profileSelectedAt;
 
 @end
@@ -45,8 +47,14 @@ static void *ProgressObserverContext = &ProgressObserverContext;
     if ([self respondsToSelector:@selector(setNeedsUpdateOfScreenEdgesDeferringSystemGestures)]) {
         [self setNeedsUpdateOfScreenEdgesDeferringSystemGestures];
     }
-
-    self.versionTextField = [[PickTextField alloc] initWithFrame:CGRectMake(4, 4, self.toolbar.frame.size.width * 0.8 - 8, self.toolbar.frame.size.height - 8)];
+    UIToolbar *targetToolbar = self.toolbar;
+    BOOL hasLiquidGlass = _UISolariumEnabled && _UISolariumEnabled();
+    
+    if(hasLiquidGlass) {
+        self.versionTextField = [[PickTextField alloc] initWithFrame:CGRectMake(0, 0, MIN(self.view.frame.size.width,self.view.frame.size.height)*0.75, 36)];
+    } else {
+        self.versionTextField = [[PickTextField alloc] initWithFrame:CGRectMake(4, 4, self.toolbar.frame.size.width * 0.8 - 8, self.toolbar.frame.size.height - 8)];
+    }
     [self.versionTextField addTarget:self.versionTextField action:@selector(resignFirstResponder) forControlEvents:UIControlEventEditingDidEndOnExit];
     self.versionTextField.autoresizingMask = AUTORESIZE_MASKS;
     self.versionTextField.placeholder = @"Specify version...";
@@ -60,43 +68,61 @@ static void *ProgressObserverContext = &ProgressObserverContext;
     self.versionPickerView = [[PLPickerView alloc] init];
     self.versionPickerView.delegate = self;
     self.versionPickerView.dataSource = self;
-    UIToolbar *versionPickToolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0.0, 0.0, self.view.frame.size.width, 44.0)];
 
     [self reloadProfileList];
 
-    UIBarButtonItem *versionFlexibleSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:self action:nil];
-    UIBarButtonItem *versionDoneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(versionClosePicker)];
-    versionPickToolbar.items = @[versionFlexibleSpace, versionDoneButton];
-    self.versionTextField.inputAccessoryView = versionPickToolbar;
     self.versionTextField.inputView = self.versionPickerView;
 
-    UIView *targetToolbar = self.toolbar;
-    [targetToolbar addSubview:self.versionTextField];
+    self.progressViewMain = [[UIProgressView alloc] initWithFrame:self.versionTextField.frame];
 
-    self.progressViewMain = [[UIProgressView alloc] initWithFrame:CGRectMake(0, 0, self.toolbar.frame.size.width, 4)];
+    UIView *textFieldContainer = nil;
+    if(hasLiquidGlass) {
+        textFieldContainer = [[UIView alloc] initWithFrame:self.versionTextField.frame];
+        [textFieldContainer addSubview:self.progressViewMain];
+        self.buttonInstallItem = [[UIBarButtonItem alloc] initWithTitle:localize(@"Play", nil)
+                                                                  style:UIBarButtonItemStylePlain
+                                                                 target:self
+                                                                 action:@selector(performInstallOrShowDetails:)];
+        self.buttonInstallItem.enabled = NO;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.buttonInstallItem.view.superview.superview.superview.superview.backgroundColor = [UIColor colorWithRed:121/255.0 green:56/255.0 blue:162/255.0 alpha:0.5];
+        });
+        [textFieldContainer addSubview:self.versionTextField];
+        UIBarButtonItem *textFieldItem = [[UIBarButtonItem alloc] initWithCustomView:textFieldContainer];
+        self.globalToolbarItems = @[
+            textFieldItem,
+            self.buttonInstallItem,
+        ];
+    } else {
+        self.buttonInstall = [UIButton buttonWithType:UIButtonTypeSystem];
+        setButtonPointerInteraction(self.buttonInstall);
+        [self.buttonInstall setTitle:localize(@"Play", nil) forState:UIControlStateNormal];
+        self.buttonInstall.autoresizingMask = AUTORESIZE_MASKS;
+        self.buttonInstall.backgroundColor = [UIColor colorWithRed:121/255.0 green:56/255.0 blue:162/255.0 alpha:1.0];
+        self.buttonInstall.layer.cornerRadius = 5;
+        self.buttonInstall.frame = CGRectMake(self.toolbar.frame.size.width * 0.8, 4, self.toolbar.frame.size.width * 0.2, self.toolbar.frame.size.height - 8);
+        self.buttonInstall.tintColor = UIColor.whiteColor;
+        self.buttonInstall.enabled = NO;
+        [self.buttonInstall addTarget:self action:@selector(performInstallOrShowDetails:) forControlEvents:UIControlEventPrimaryActionTriggered];
+        [targetToolbar addSubview:self.progressViewMain];
+        [targetToolbar addSubview:self.versionTextField];
+        [targetToolbar addSubview:self.buttonInstall];
+    }
+    
     self.progressViewMain.autoresizingMask = AUTORESIZE_MASKS;
     self.progressViewMain.hidden = YES;
-    [targetToolbar addSubview:self.progressViewMain];
-
-    self.buttonInstall = [UIButton buttonWithType:UIButtonTypeSystem];
-    setButtonPointerInteraction(self.buttonInstall);
-    [self.buttonInstall setTitle:localize(@"Play", nil) forState:UIControlStateNormal];
-    self.buttonInstall.autoresizingMask = AUTORESIZE_MASKS;
-    self.buttonInstall.backgroundColor = [UIColor colorWithRed:121/255.0 green:56/255.0 blue:162/255.0 alpha:1.0];
-    self.buttonInstall.layer.cornerRadius = 5;
-    self.buttonInstall.frame = CGRectMake(self.toolbar.frame.size.width * 0.8, 4, self.toolbar.frame.size.width * 0.2, self.toolbar.frame.size.height - 8);
-    self.buttonInstall.tintColor = UIColor.whiteColor;
-    self.buttonInstall.enabled = NO;
-    [self.buttonInstall addTarget:self action:@selector(performInstallOrShowDetails:) forControlEvents:UIControlEventPrimaryActionTriggered];
-    [targetToolbar addSubview:self.buttonInstall];
-
     self.progressText = [[UILabel alloc] initWithFrame:self.versionTextField.frame];
     self.progressText.adjustsFontSizeToFitWidth = YES;
     self.progressText.autoresizingMask = AUTORESIZE_MASKS;
     self.progressText.font = [self.progressText.font fontWithSize:16];
     self.progressText.textAlignment = NSTextAlignmentCenter;
     self.progressText.userInteractionEnabled = NO;
-    [targetToolbar addSubview:self.progressText];
+    
+    if(hasLiquidGlass) {
+        [textFieldContainer addSubview:self.progressText];
+    } else {
+        [targetToolbar addSubview:self.progressText];
+    }
 
     [self fetchRemoteVersionList];
     [NSNotificationCenter.defaultCenter addObserver:self
@@ -117,6 +143,13 @@ static void *ProgressObserverContext = &ProgressObserverContext;
             }
         };
         [BaseAuthenticator.current refreshTokenWithCallback:callback];
+    }
+}
+
+- (void)setViewControllers:(NSArray<UIViewController *> *)viewControllers animated:(BOOL)animated {
+    [super setViewControllers:viewControllers animated:animated];
+    if (!viewControllers.firstObject.toolbarItems && self.globalToolbarItems) {
+        viewControllers.firstObject.toolbarItems = self.globalToolbarItems;
     }
 }
 
@@ -146,36 +179,23 @@ static void *ProgressObserverContext = &ProgressObserverContext;
 }
 
 - (void)fetchRemoteVersionList {
-    self.buttonInstall.enabled = NO;
+    [(id)(self.buttonInstall ?: self.buttonInstallItem) setEnabled:NO];
     remoteVersionList = @[
         @{@"id": @"latest-release", @"type": @"release"},
         @{@"id": @"latest-snapshot", @"type": @"snapshot"}
     ].mutableCopy;
 
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    // 配置响应序列化器以接受application/octet-stream
-    AFJSONResponseSerializer *serializer = [AFJSONResponseSerializer serializer];
-    [serializer setAcceptableContentTypes:[NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript", @"application/octet-stream", nil]];
-    manager.responseSerializer = serializer;
-    NSString *downloadSource = getPrefObject(@"general.download_source");
-    NSString *versionManifestURL;
-    
-    if ([downloadSource isEqualToString:@"bmclapi"]) {
-        versionManifestURL = @"https://bmclapi2.bangbang93.com/mc/game/version_manifest_v2.json";
-    } else {
-        versionManifestURL = @"https://piston-meta.mojang.com/mc/game/version_manifest_v2.json";
-    }
-    
-    [manager GET:versionManifestURL parameters:nil headers:nil progress:^(NSProgress * _Nonnull progress) {
+    [manager GET:@"https://piston-meta.mojang.com/mc/game/version_manifest_v2.json" parameters:nil headers:nil progress:^(NSProgress * _Nonnull progress) {
         self.progressViewMain.progress = progress.fractionCompleted;
     } success:^(NSURLSessionTask *task, NSDictionary *responseObject) {
         [remoteVersionList addObjectsFromArray:responseObject[@"versions"]];
         NSDebugLog(@"[VersionList] Got %d versions", remoteVersionList.count);
         setPrefObject(@"internal.latest_version", responseObject[@"latest"]);
-        self.buttonInstall.enabled = YES;
+        [(id)(self.buttonInstall ?: self.buttonInstallItem) setEnabled:YES];
     } failure:^(NSURLSessionTask *operation, NSError *error) {
         NSDebugLog(@"[VersionList] Warning: Unable to fetch version list: %@", error.localizedDescription);
-        self.buttonInstall.enabled = YES;
+        [(id)(self.buttonInstall ?: self.buttonInstallItem) setEnabled:YES];
     }];
 }
 
@@ -218,8 +238,6 @@ static void *ProgressObserverContext = &ProgressObserverContext;
     [self presentViewController:documentPicker animated:YES completion:nil];
 }
 
-
-
 - (void)enterModInstallerWithPath:(NSString *)path hitEnterAfterWindowShown:(BOOL)hitEnter {
     JavaGUIViewController *vc = [[JavaGUIViewController alloc] init];
     vc.filepath = path;
@@ -235,7 +253,6 @@ static void *ProgressObserverContext = &ProgressObserverContext;
 }
 
 - (void)documentPicker:(UIDocumentPickerViewController *)controller didPickDocumentAtURL:(NSURL *)url {
-    // Handle normal jar file import
     [self enterModInstallerWithPath:url.path hitEnterAfterWindowShown:NO];
 }
 
@@ -246,12 +263,17 @@ static void *ProgressObserverContext = &ProgressObserverContext;
             view.enabled = enabled;
         }
     }
+    self.versionTextField.alpha = enabled ? 1 : 0.2;
     self.progressViewMain.hidden = enabled;
     self.progressText.text = nil;
     if (downloading) {
-        [self.buttonInstall setTitle:localize(enabled ? @"Play" : @"Details", nil) forState:UIControlStateNormal];
-        self.buttonInstall.alpha = 1;
-        self.buttonInstall.enabled = YES;
+        if(self.buttonInstall) {
+            [self.buttonInstall setTitle:localize(enabled ? @"Play" : @"Details", nil) forState:UIControlStateNormal];
+            self.buttonInstall.enabled = YES;
+        } else {
+            self.buttonInstallItem.title = localize(enabled ? @"Play" : @"Details", nil);
+            self.buttonInstallItem.enabled = YES;
+        }
     }
     UIApplication.sharedApplication.idleTimerDisabled = !enabled;
 }
@@ -302,14 +324,14 @@ static void *ProgressObserverContext = &ProgressObserverContext;
     });
 }
 
-- (void)performInstallOrShowDetails:(UIButton *)sender {
+- (void)performInstallOrShowDetails:(UIBarButtonItem *)sender {
     if (self.task) {
         if (!self.progressVC) {
             self.progressVC = [[DownloadProgressViewController alloc] initWithTask:self.task];
         }
         UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:self.progressVC];
         nav.modalPresentationStyle = UIModalPresentationPopover;
-        nav.popoverPresentationController.sourceView = sender;
+        nav.popoverPresentationController.sourceView = sender.view;
         [self presentViewController:nav animated:YES completion:nil];
     } else {
         [self launchMinecraft:sender];
@@ -344,7 +366,7 @@ static void *ProgressObserverContext = &ProgressObserverContext;
         self.progressText.text = progress.localizedAdditionalDescription;
 
         if (!progress.finished) return;
-        [self.progressVC dismissViewControllerAnimated:NO completion:nil];
+        [self.progressVC dismissModalViewControllerAnimated:NO];
 
         self.progressViewMain.observedProgress = nil;
         if (self.task.metadata) {
@@ -352,10 +374,10 @@ static void *ProgressObserverContext = &ProgressObserverContext;
                 UIKit_launchMinecraftSurfaceVC(self.view.window, self.task.metadata);
             }];
         } else {
-            self.task = nil;
-            [self setInteractionEnabled:YES forDownloading:YES];
             [self reloadProfileList];
         }
+        self.task = nil;
+        [self setInteractionEnabled:YES forDownloading:YES];
     });
 }
 
@@ -388,7 +410,7 @@ static void *ProgressObserverContext = &ProgressObserverContext;
 
 - (void)invokeAfterJITEnabled:(void(^)(void))handler {
     localVersionList = remoteVersionList = nil;
-    BOOL hasTrollStoreJIT = getEntitlementValue(@"com.apple.private.local.sandboxed-jit");
+    BOOL hasTrollStoreJIT = getEntitlementValue(@"jb.pmap_cs_custom_trust");
 
     if (isJITEnabled(false)) {
         [ALTServerManager.sharedManager stopDiscovering];
@@ -474,6 +496,9 @@ static void *ProgressObserverContext = &ProgressObserverContext;
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
     [sidebarViewController updateAccountInfo];
+    if (!self.viewControllers.firstObject.toolbarItems && self.globalToolbarItems) {
+        self.viewControllers.firstObject.toolbarItems = self.globalToolbarItems;
+    }
 }
 
 @end
