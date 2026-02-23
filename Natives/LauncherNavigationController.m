@@ -373,8 +373,9 @@ static void *ProgressObserverContext = &ProgressObserverContext;
 
         self.progressViewMain.observedProgress = nil;
         if (self.task.metadata) {
+            __block NSDictionary *metadata = self.task.metadata;
             [self invokeAfterJITEnabled:^{
-                UIKit_launchMinecraftSurfaceVC(self.view.window, self.task.metadata);
+                UIKit_launchMinecraftSurfaceVC(self.view.window, metadata);
             }];
         } else {
             [self reloadProfileList];
