@@ -37,7 +37,7 @@
 
 ## 🌟 Remastered Core Highlights
 Optimized and adapted based on the official Amethyst, focusing on iOS/iPadOS experience enhancement, core features include:
-- **Coming soon*: (In development, coming soon)
+- **Coming soon**: (In development, coming soon)
 
 > ⚠️ Note: If you need the official Android code, please go to [Amethyst-Android](https://github.com/AngelAuraMC/Amethyst-Android).
 
