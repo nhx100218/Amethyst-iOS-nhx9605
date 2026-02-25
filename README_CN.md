@@ -1,5 +1,4 @@
-# Amethyst (iOS) 重制版 
-###### 注：以后可能会改名
+# Amethyst (iOS) nhx9605
 
 [![开发构建状态](https://github.com/nhx100218/Amethyst-iOS-nhx9605/actions/workflows/development.yml/badge.svg?branch=main)](.github/workflows/development.yml)
 [![总下载量](https://img.shields.io/github/downloads/nhx100218/Amethyst-iOS-nhx9605/total?label=Downloads&style=flat)](https://github.com/nhx100218/Amethyst-iOS-nhx9605/releases)
