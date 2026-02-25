@@ -90,8 +90,9 @@ JIT（Just-In-Time）是流畅运行游戏的核心，iOS 需通过以下工具�
 
 ## 🙏 贡献者
 Amethyst是惊人的，而且令人惊讶的稳定，如果没有帮助和为该项目做出贡献的社区，就不会这样！这是一些贡献者的名字：
-@crystall1nedev - 项目经理，iOS端口开发人员
-@khanhduytran0 - iOS端口开发人员
+
+@crystall1nedev - 项目管理员，iOS端口开发人员  
+@khanhduytran0 - iOS端口开发人员  
 @artdeell  
 @Mathius-Boulay  
 @zhuowei  
