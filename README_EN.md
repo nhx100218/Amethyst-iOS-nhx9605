@@ -37,7 +37,9 @@
 
 ## 🌟 Remastered Core Highlights
 Optimized and adapted based on the official Amethyst, focusing on iOS/iPadOS experience enhancement, core features include:
-- **Coming soon**: (In development, coming soon)
+- **Full Chinese Localization Support**: Complete Chinese localization verified through manual inspection, including the latest iOS 26 related control localization.  
+- **iOS 26 Liquid Glass Support**: Supports full liquid glass effects in sync with the upstream library.  
+- **Fix for 1.21.9+ Physical Keyboard Issue**: (In development, to be resolved soon)
 
 > ⚠️ Note: If you need the official Android code, please go to [Amethyst-Android](https://github.com/AngelAuraMC/Amethyst-Android).
 
