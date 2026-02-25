@@ -528,12 +528,14 @@ char getKeyModifiers(int key, int action) {
     return currMods;
 }
 
-void CallbackBridge_nativeSendKey(int key, int scancode, int action, int mods) {
+void CallbackBridge_nativeSendKey(int key, int scancode, int action, int mods)
+{
     if (GLFW_invoke_Key && isInputReady) {
-        keyDownBuffer[MAX(0, key-31)]=(jbyte)action;
-        if (mods == 0) {
-            mods = getKeyModifiers(key, action);
-        }
+
+        keyDownBuffer[MAX(0, key-31)] = (jbyte)action;
+
+        // 修复：信任 UIKit modifier
+        // 删除 getKeyModifiers
 
         if (isUseStackQueueCall) {
             sendData(EVENT_TYPE_KEY, key, scancode, action, mods);
@@ -542,21 +544,23 @@ void CallbackBridge_nativeSendKey(int key, int scancode, int action, int mods) {
         }
     }
 
-    // On macOS, Minecraft expects the Command key
     if (key == GLFW_KEY_LEFT_CONTROL) {
         CallbackBridge_nativeSendKey(GLFW_KEY_LEFT_SUPER, 0, action, mods);
-    } else if (key == GLFW_KEY_RIGHT_CONTROL) {
+    }
+    else if (key == GLFW_KEY_RIGHT_CONTROL) {
         CallbackBridge_nativeSendKey(GLFW_KEY_RIGHT_SUPER, 0, action, mods);
     }
 }
 
-void CallbackBridge_nativeSendMouseButton(int button, int action, int mods) {
+void CallbackBridge_nativeSendMouseButton(int button, int action, int mods)
+{
     if (isInputReady) {
-        if (button == -1) {
-        } else if (GLFW_invoke_MouseButton) {
-            if (mods == 0) {
-                mods = getKeyModifiers(0, action);
-            }
+
+        if (button == -1) return;
+
+        if (GLFW_invoke_MouseButton) {
+
+            // 不覆盖 modifier
 
             if (isUseStackQueueCall) {
                 sendData(EVENT_TYPE_MOUSE_BUTTON, button, action, mods, 0);
