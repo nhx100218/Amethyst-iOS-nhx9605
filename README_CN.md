@@ -1,12 +1,39 @@
 # Amethyst (iOS) nhx9605
 
-[![开发构建状态](https://github.com/nhx100218/Amethyst-iOS-nhx9605/actions/workflows/development.yml/badge.svg?branch=main)](.github/workflows/development.yml)
-[![总下载量](https://img.shields.io/github/downloads/nhx100218/Amethyst-iOS-nhx9605/total?label=Downloads&style=flat)](https://github.com/nhx100218/Amethyst-iOS-nhx9605/releases)
-<a href="https://github.com/nhx100218/Amethyst-iOS-nhx9605/releases/"><img src="https://img.shields.io/github/v/release/nhx100218/Amethyst-iOS-nhx9605?style=flat"></a>
-<a href="https://raw.githubusercontent.com/nhx100218/Amethyst-iOS-nhx9605/main/LICENSE"><img src="https://img.shields.io/github/license/nhx100218/Amethyst-iOS-nhx9605?style=flat"></a>
-![最后提交](https://img.shields.io/github/last-commit/nhx100218/Amethyst-iOS-nhx9605?color=c78aff&label=last%20commit&style=flat)
+<p align="center">
 
-[English](README.md) | **中文** 
+<a href="README_EN.md">
+<img src="https://img.shields.io/badge/Language-English-blue?style=for-the-badge">
+</a>
+
+<a href="README.md">
+<img src="https://img.shields.io/badge/语言-中文-red?style=for-the-badge">
+</a>
+
+</p>
+
+<p align="center">
+
+<a href="https://github.com/nhx100218/Amethyst-iOS-nhx9605/actions/workflows/development.yml">
+<img src="https://github.com/nhx100218/Amethyst-iOS-nhx9605/actions/workflows/development.yml/badge.svg?branch=main">
+</a>
+
+<a href="https://github.com/nhx100218/Amethyst-iOS-nhx9605/releases">
+<img src="https://img.shields.io/github/downloads/nhx100218/Amethyst-iOS-nhx9605/total?label=Downloads&style=flat">
+</a>
+
+<a href="https://github.com/nhx100218/Amethyst-iOS-nhx9605/releases/">
+<img src="https://img.shields.io/github/v/release/nhx100218/Amethyst-iOS-nhx9605?style=flat">
+</a>
+
+<a href="https://raw.githubusercontent.com/nhx100218/Amethyst-iOS-nhx9605/main/LICENSE">
+<img src="https://img.shields.io/github/license/nhx100218/Amethyst-iOS-nhx9605?style=flat">
+</a>
+
+<img src="https://img.shields.io/github/last-commit/nhx100218/Amethyst-iOS-nhx9605?color=c78aff&label=Last%20Commit&style=flat">
+
+</p>
+
 
 ## 🌟 重制版核心亮点
 基于官方 Amethyst 优化适配，聚焦 iOS/iPadOS 体验升级，核心特性包括：
@@ -45,11 +72,6 @@
 1. 前往 [GitHub Actions 标签页](https://github.com/nhx100218/Amethyst-iOS-nhx9605/actions) 下载 IPA 安装包
 2. (正常的安装步骤)
 
-#### 3. Nightly 测试版（每日构建）
-> 🔴 风险提示：测试版可能包含崩溃、无法启动等严重漏洞，仅用于开发测试！
-1. 前往 [GitHub Actions 标签页](https://github.com/nhx100218/Amethyst-iOS-nhx9605/actions) 下载最新 IPA 测试包
-2. 在侧载工具（AltStore/SideStore 等）中导入 IPA 完成安装
-
 
 ### ⚡ 启用 JIT（必做！）
 JIT（Just-In-Time）是流畅运行游戏的核心，iOS 需通过以下工具启用，按自身环境选择：
@@ -65,8 +87,14 @@ JIT（Just-In-Time）是流畅运行游戏的核心，iOS 需通过以下工具�
 
 
 ## 🙏 贡献者
-- @LanRhyme - ShardLauncher作者，允许iOS 26用户使用启动器、更改日志内容
-- @WeiErLiTeo - 为启动器添加Mod下载功能、优化了TouchController支持、添加双指长按打开键盘功能
+Amethyst是惊人的，而且令人惊讶的稳定，如果没有帮助和为该项目做出贡献的社区，就不会这样！这是一些贡献者的名字：
+@crystall1nedev - 项目经理，iOS端口开发人员
+@khanhduytran0 - iOS端口开发人员
+@artdeell  
+@Mathius-Boulay  
+@zhuowei  
+@jkcoxson   
+@Diatrus 
 
 
 ## 📦 第三方组件及许可证
