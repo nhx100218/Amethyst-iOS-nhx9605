@@ -2,12 +2,12 @@
 
 <p align="center">
 
-<a href="README_EN.md">
-<img src="https://img.shields.io/badge/Language-English-blue?style=for-the-badge">
-</a>
-
 <a href="README.md">
 <img src="https://img.shields.io/badge/语言-中文-red?style=for-the-badge">
+</a>
+
+<a href="README_EN.md">
+<img src="https://img.shields.io/badge/Language-English-blue?style=for-the-badge">
 </a>
 
 </p>
