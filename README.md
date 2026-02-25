@@ -1,13 +1,39 @@
 # Amethyst (iOS) nhx9605
 
+<p align="center">
 
-[![Development Build Status](https://github.com/nhx100218/Amethyst-iOS-nhx9605/actions/workflows/development.yml/badge.svg?branch=main)](.github/workflows/development.yml)
-[![Total Downloads](https://img.shields.io/github/downloads/nhx100218/Amethyst-iOS-nhx9605/total?label=Downloads&style=flat)](https://github.com/nhx100218/Amethyst-iOS-nhx9605/releases)
-<a href="https://github.com/nhx100218/Amethyst-iOS-nhx9605/releases/"><img src="https://img.shields.io/github/v/release/nhx100218/Amethyst-iOS-nhx9605?style=flat"></a>
-<a href="https://raw.githubusercontent.com/nhx100218/Amethyst-iOS-nhx9605/main/LICENSE"><img src="https://img.shields.io/github/license/nhx100218/Amethyst-iOS-nhx9605?style=flat"></a>
-![Last Commit](https://img.shields.io/github/last-commit/nhx100218/Amethyst-iOS-nhx9605?color=c78aff&label=last%20commit&style=flat)
+<a href="README.md">
+<img src="https://img.shields.io/badge/Language-English-blue?style=for-the-badge">
+</a>
 
-**English** | [中文](README_CN.md)
+<a href="README_CN.md">
+<img src="https://img.shields.io/badge/语言-中文-red?style=for-the-badge">
+</a>
+
+</p>
+
+<p align="center">
+
+<a href="https://github.com/nhx100218/Amethyst-iOS-nhx9605/actions/workflows/development.yml">
+<img src="https://github.com/nhx100218/Amethyst-iOS-nhx9605/actions/workflows/development.yml/badge.svg?branch=main">
+</a>
+
+<a href="https://github.com/nhx100218/Amethyst-iOS-nhx9605/releases">
+<img src="https://img.shields.io/github/downloads/nhx100218/Amethyst-iOS-nhx9605/total?label=Downloads&style=flat">
+</a>
+
+<a href="https://github.com/nhx100218/Amethyst-iOS-nhx9605/releases/">
+<img src="https://img.shields.io/github/v/release/nhx100218/Amethyst-iOS-nhx9605?style=flat">
+</a>
+
+<a href="https://raw.githubusercontent.com/nhx100218/Amethyst-iOS-nhx9605/main/LICENSE">
+<img src="https://img.shields.io/github/license/nhx100218/Amethyst-iOS-nhx9605?style=flat">
+</a>
+
+<img src="https://img.shields.io/github/last-commit/nhx100218/Amethyst-iOS-nhx9605?color=c78aff&label=Last%20Commit&style=flat">
+
+</p>
+
 
 ## 🌟 Remastered Core Highlights
 Optimized and adapted based on the official Amethyst, focusing on iOS/iPadOS experience enhancement, core features include:
@@ -59,9 +85,14 @@ JIT (Just-In-Time) is crucial for smooth game operation. iOS needs to enable it 
 
 
 ## 🙏 Contributors
-- @LanRhyme - ShardLauncher author, allows iOS 26 users to use the launcher, changed log content
-- @WeiErLiTeo - Added Mod download functionality to the launcher, optimized TouchController support, added two-finger long press to open keyboard function
-- @Li2548 - Synchronized upstream changes
+Amethyst is amazing, and surprisingly stable, and it wouldn't be this way without the commmunity that helped and contribute to the project! Some notable names:
+@crystall1nedev - Project manager, iOS port developer  
+@khanhduytran0 - iOS port developer  
+@artdeell  
+@Mathius-Boulay  
+@zhuowei  
+@jkcoxson   
+@Diatrus 
 
 
 ## 📦 Third-Party Components and Licenses
