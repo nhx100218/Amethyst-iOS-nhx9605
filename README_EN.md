@@ -53,8 +53,7 @@ The [Amethyst wiki](https://wiki.angelauramc.dev/wiki/getting_started/INSTALL.ht
 | **Minimum** | iOS 14.0 and above | iPhone 6s+/iPad 5th gen+/iPad Air 2+/iPad mini 4+/All iPad Pro/iPod touch 7th gen |
 | **Recommended** | iOS 14.5 and above (better experience) | iPhone XS+ (excluding XR/SE 2nd gen), iPad 10th gen+/Air 4th gen+/mini 6th gen+/iPad Pro (excluding 9.7 inch) |
 
-> ⚠️ Key Reminder: Serious compatibility issues exist with iOS 14.0~14.4.2, **strongly recommended to upgrade to iOS 14.5+**; Supports iOS 17.x/iOS 18.x, but requires computer assistance for configuration, see [Official JIT Guide](https://wiki.angelauramc.dev/wiki/faq/ios/JIT.html#what-are-the-methods-to-enable-jit) for details; Supports iOS 26.x (called iOS 19.x in source code), but no special adaptation has been made, unpredictable issues may occur.
-
+> ⚠️ Key Reminder: Serious compatibility issues exist with iOS 14.0~14.4.2, **strongly recommended to upgrade to iOS 14.5+**; Supports iOS 17.x/iOS 18.x, but requires computer assistance for configuration, see [Official JIT Guide](https://wiki.angelauramc.dev/wiki/faq/ios/JIT.html#what-are-the-methods-to-enable-jit) for details; Supports iOS 26.x and Liquid Glass theme.
 
 ### 🔧 Sideload Preparation
 Prioritize tools that support "permanent signing + automatic JIT", recommended by priority:
@@ -72,6 +71,8 @@ Prioritize tools that support "permanent signing + automatic JIT", recommended b
 #### 2. Official Release (AltStore/SideStore Channel)
 1. Go to [GitHub Actions page](https://github.com/nhx100218/Amethyst-iOS-nhx9605/actions) to download the IPA installation package
 2. (Normal installation steps)
+
+> ⚠️ Note: The daily build may be unstable. Please give priority to the latest build. If you can't install/run the game and fail, choose to build and run earlier. Don't download the failed action.
 
 ### ⚡ Enable JIT (Required!)
 JIT (Just-In-Time) is crucial for smooth game operation. iOS needs to enable it through the following tools, choose according to your environment:
