@@ -52,6 +52,26 @@
     BOOL(^whenNotInGame)() = ^BOOL(){
         return self.navigationController != nil;
     };
+    
+    // ----- 添加 TouchController 说明弹窗的 Block -----
+    __weak typeof(self) weakSelf = self;
+    void (^showTouchInfoAlert)(BOOL) = ^(BOOL enabled) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:localize(@"preference.popup.touch_info.title", nil)
+                                                                           message:localize(@"preference.popup.touch_info.message", nil)
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+            
+            [alert addAction:[UIAlertAction actionWithTitle:localize(@"OK", nil) style:UIAlertActionStyleDefault handler:nil]];
+            
+            [alert addAction:[UIAlertAction actionWithTitle:@"GitHub" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://github.com/TouchController/TouchController"] options:@{} completionHandler:nil];
+            }]];
+            
+            [weakSelf presentViewController:alert animated:YES completion:nil];
+        });
+    };
+    // -------------------------------------------------
+
     self.prefContents = @[
         @[
             // General settings
@@ -219,6 +239,36 @@
         ], @[
             // Control settings
             @{@"icon": @"gamecontroller"},
+            // ----- 添加 TouchController 开关项 -----
+            @{@"key": @"mod_touch_enable",
+              @"icon": @"hand.point.up.left",
+              @"hasDetail": @YES,
+              @"type": self.typeSwitch,
+              @"requestReload": @YES,
+              @"action": ^void(BOOL enabled) {
+                  if (enabled) {
+                      // 启用时设置 UDP 协议环境变量
+                      NSString *currentEnv = getPrefObject(@"java.env_variables");
+                      if ([currentEnv isKindOfClass:[NSString class]]) {
+                          if (![currentEnv containsString:@"TOUCH_CONTROLLER_PROXY=12450"]) {
+                              NSString *newEnv = [currentEnv stringByAppendingString:@" TOUCH_CONTROLLER_PROXY=12450"];
+                              setPrefObject(@"java.env_variables", newEnv);
+                          }
+                      } else {
+                          setPrefObject(@"java.env_variables", @"TOUCH_CONTROLLER_PROXY=12450");
+                      }
+                  } else {
+                      // 禁用时移除 UDP 协议环境变量
+                      NSString *currentEnv = getPrefObject(@"java.env_variables");
+                      if ([currentEnv isKindOfClass:[NSString class]]) {
+                          NSString *newEnv = [currentEnv stringByReplacingOccurrencesOfString:@" TOUCH_CONTROLLER_PROXY=12450" withString:@""];
+                          setPrefObject(@"java.env_variables", newEnv);
+                      }
+                  }
+                  showTouchInfoAlert(enabled);
+              }
+            },
+            // ----------------------------------------
             @{@"key": @"default_gamepad_ctrl",
                 @"icon": @"hammer",
                 @"type": self.typeChildPane,
@@ -254,7 +304,12 @@
             @{@"key": @"slideable_hotbar",
                 @"hasDetail": @YES,
                 @"icon": @"slider.horizontal.below.rectangle",
-                @"type": self.typeSwitch
+                @"type": self.typeSwitch,
+                // ----- 添加禁用条件：当 TouchController 启用时禁用 -----
+                @"enableCondition": ^BOOL(){
+                    return ![self.getPreference(@"control", @"mod_touch_enable") boolValue];
+                }
+                // -----------------------------------------------------
             },
             @{@"key": @"press_duration",
                 @"hasDetail": @YES,
