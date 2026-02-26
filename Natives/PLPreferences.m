@@ -45,7 +45,10 @@
             @"virtmouse_enable": @NO,
             @"gyroscope_enable": @NO,
             @"gyroscope_invert_x_axis": @NO,
-            @"gyroscope_sensitivity": @(100)
+            @"gyroscope_sensitivity": @(100),
+            // ----- 添加 TouchController 开关默认值 -----
+            @"mod_touch_enable": @NO
+            // -------------------------------------------
         }.mutableCopy,
         @"java": @{
             @"java_homes": @{
