@@ -49,7 +49,7 @@ typedef NS_ENUM(NSInteger, TouchControllerCommMode) {
     };
 
     // 调用父类初始化
-    [super initViewCreation];
+    //[super initViewCreation];
 
     // 通信方式选择
     self.typeChildPane = ^void(UITableViewCell *cell, NSString *section, NSString *key, NSDictionary *item) {
