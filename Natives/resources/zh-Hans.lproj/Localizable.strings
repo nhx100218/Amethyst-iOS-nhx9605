@@ -334,6 +334,8 @@
 "controller_configurator.section.footer.controller_style" = "在此配置器中显示不同的手柄按钮名称。";
 
 // TouchController support
+// TouchController settings
+"preference.title.touchcontroller" = "触摸控制设置";
 "preference.title.mod_touch_enable" = "启用 TouchController 支持";
 "preference.detail.mod_touch_enable" = "启用 TouchController 模组支持。注意：开启此项将禁用“可滑动快捷栏”。";
 "preference.popup.touch_info.title" = "TouchController 适配说明";
