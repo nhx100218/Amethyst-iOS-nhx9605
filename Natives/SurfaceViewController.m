@@ -2,6 +2,79 @@
 #import <GameController/GameController.h>
 #import <objc/runtime.h>
 
+// --- [START] TouchController Mod Support ---
+#include <arpa/inet.h>
+#include <netinet/in.h>
+#include <sys/socket.h>
+#include <fcntl.h>
+
+#define TC_MOD_PORT 12450
+
+@interface TouchSender : NSObject {
+    int _sock;
+    struct sockaddr_in6 _target;
+}
+- (void)sendType:(int32_t)type id:(int32_t)fingerId x:(float)x y:(float)y;
+@end
+
+@implementation TouchSender
+
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        _sock = socket(AF_INET6, SOCK_DGRAM, 0);
+        if (_sock < 0) {
+            NSLog(@"[TouchController] Error: Failed to create socket");
+        } else {
+            // Non-blocking mode
+            int flags = fcntl(_sock, F_GETFL, 0);
+            fcntl(_sock, F_SETFL, flags | O_NONBLOCK);
+
+            memset(&_target, 0, sizeof(_target));
+            _target.sin6_family = AF_INET6;
+            _target.sin6_port = htons(TC_MOD_PORT);
+            // Connect to localhost IPv6 ::1
+            if (inet_pton(AF_INET6, "::1", &_target.sin6_addr) <= 0) {
+                NSLog(@"[TouchController] Error: Invalid IPv6 address");
+            } else {
+                NSLog(@"[TouchController] Sender ready on port %d", TC_MOD_PORT);
+            }
+        }
+    }
+    return self;
+}
+
+- (void)dealloc {
+    if (_sock >= 0) close(_sock);
+}
+
+- (void)sendType:(int32_t)type id:(int32_t)fingerId x:(float)x y:(float)y {
+    if (_sock < 0) return;
+
+    struct {
+        int32_t type;
+        int32_t id;
+        int32_t x;
+        int32_t y;
+    } packet;
+
+    packet.type = htonl(type);
+    packet.id = htonl(fingerId);
+
+    // Float to Int bits (Big Endian)
+    union { float f; int32_t i; } ux, uy;
+    ux.f = x;
+    uy.f = y;
+    packet.x = htonl(ux.i);
+    packet.y = htonl(uy.i);
+
+    size_t length = (type == 2) ? 8 : 16;
+
+    sendto(_sock, &packet, length, 0, (struct sockaddr *)&_target, sizeof(_target));
+}
+@end
+// --- [END] TouchController Mod Support ---
+
 #import "authenticator/BaseAuthenticator.h"
 #import "customcontrols/ControlButton.h"
 #import "customcontrols/ControlDrawer.h"
@@ -58,6 +131,10 @@ static GameSurfaceView* pojavWindow;
 
 @property(nonatomic) UIImpactFeedbackGenerator *lightHaptic;
 @property(nonatomic) UIImpactFeedbackGenerator *mediumHaptic;
+
+// --- [START] TouchController Mod Support ---
+@property(nonatomic, strong) TouchSender *touchSender;
+// --- [END] TouchController Mod Support ---
 
 @end
 
@@ -255,6 +332,10 @@ static GameSurfaceView* pojavWindow;
     }
 
     [self.rootView addSubview:self.inputTextField];
+
+    // --- [START] TouchController Mod Support ---
+    self.touchSender = [[TouchSender alloc] init];
+    // --- [END] TouchController Mod Support ---
 
     [self performSelector:@selector(initCategory_LogView)];
 
@@ -618,6 +699,12 @@ static GameSurfaceView* pojavWindow;
     //}
 }
 
+// --- [START] TouchController Mod Support ---
+- (int32_t)getFingerId:(UITouch *)touch {
+    return (int32_t)((long)touch % 100000);
+}
+// --- [END] TouchController Mod Support ---
+
 - (void)pressesBegan:(NSSet<UIPress *> *)presses withEvent:(UIPressesEvent *)event {
     BOOL handled = NO;
 
@@ -979,6 +1066,21 @@ int touchesMovedCount;
 // Equals to Android ACTION_DOWN
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
+    // --- [START] TouchController Mod Support ---
+    if (getPrefBool(@"control.mod_touch_enable")) {
+        for (UITouch *touch in touches) {
+            if (touch.view != self.surfaceView) continue;
+            
+            CGPoint p = [touch locationInView:self.surfaceView];
+            float x = p.x / self.surfaceView.frame.size.width;
+            float y = p.y / self.surfaceView.frame.size.height;
+            [self.touchSender sendType:1 id:[self getFingerId:touch] x:x y:y];
+        }
+        
+        if (isGrabbing == JNI_TRUE) return;
+    }
+    // --- [END] TouchController Mod Support ---
+
     [super touchesBegan:touches withEvent:event];
     int i = 0;
     for (UITouch *touch in touches) {
@@ -1003,6 +1105,20 @@ int touchesMovedCount;
 // Equals to Android ACTION_MOVE
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
+    // --- [START] TouchController Mod Support ---
+    if (getPrefBool(@"control.mod_touch_enable")) {
+        for (UITouch *touch in touches) {
+            if (touch.view != self.surfaceView) continue;
+
+            CGPoint p = [touch locationInView:self.surfaceView];
+            float x = p.x / self.surfaceView.frame.size.width;
+            float y = p.y / self.surfaceView.frame.size.height;
+            [self.touchSender sendType:1 id:[self getFingerId:touch] x:x y:y];
+        }
+        if (isGrabbing == JNI_TRUE) return;
+    }
+    // --- [END] TouchController Mod Support ---
+
     [super touchesMoved:touches withEvent:event];
 
     for (UITouch *touch in touches) {
@@ -1036,6 +1152,15 @@ int touchesMovedCount;
 // Equals to Android ACTION_UP
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
+    // --- [START] TouchController Mod Support ---
+    if (getPrefBool(@"control.mod_touch_enable")) {
+        for (UITouch *touch in touches) {
+            [self.touchSender sendType:2 id:[self getFingerId:touch] x:0 y:0];
+        }
+        if (isGrabbing == JNI_TRUE) return;
+    }
+    // --- [END] TouchController Mod Support ---
+
     [super touchesEnded:touches withEvent:event];
     [self touchesEndedGlobal:touches withEvent:event];
 }
@@ -1043,6 +1168,15 @@ int touchesMovedCount;
 // Equals to Android ACTION_CANCEL
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
 {
+    // --- [START] TouchController Mod Support ---
+    if (getPrefBool(@"control.mod_touch_enable")) {
+        for (UITouch *touch in touches) {
+            [self.touchSender sendType:2 id:[self getFingerId:touch] x:0 y:0];
+        }
+        if (isGrabbing == JNI_TRUE) return;
+    }
+    // --- [END] TouchController Mod Support ---
+
     [super touchesCancelled:touches withEvent:event];
     [self touchesEndedGlobal:touches withEvent:event];
 }
