@@ -1,266 +1,470 @@
-#import "LauncherMenuViewController.h"
+#import <Foundation/Foundation.h>
+
+#import "DBNumberedSlider.h"
+#import "HostManagerBridge.h"
 #import "LauncherNavigationController.h"
+#import "LauncherMenuViewController.h"
 #import "LauncherPreferences.h"
-#import "LauncherPrefGameDirViewController.h"
+#import "LauncherPreferencesViewController.h"
+#import "LauncherPrefContCfgViewController.h"
 #import "LauncherPrefManageJREViewController.h"
-#import "LauncherProfileEditorViewController.h"
-#import "LauncherProfilesViewController.h"
-//#import "NSFileManager+NRFileManager.h"
-#import "PLProfiles.h"
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wunguarded-availability-new"
-#import "UIKit+AFNetworking.h"
-#pragma clang diagnostic pop
 #import "UIKit+hook.h"
-#import "installer/FabricInstallViewController.h"
-#import "installer/ForgeInstallViewController.h"
-#import "installer/ModpackInstallViewController.h"
+
+#import "config.h"
 #import "ios_uikit_bridge.h"
 #import "utils.h"
 
-typedef NS_ENUM(NSUInteger, LauncherProfilesTableSection) {
-    kInstances,
-    kProfiles
-};
+// 导入 TouchController 子页面
+#import "TouchControllerPreferencesViewController.h"
 
-@interface LauncherProfilesViewController () //<UIContextMenuInteractionDelegate>
-
-@property(nonatomic) UIBarButtonItem *createButtonItem;
+@interface LauncherPreferencesViewController()
+@property(nonatomic) NSArray<NSString*> *rendererKeys, *rendererList;
 @end
 
-@implementation LauncherProfilesViewController
+@implementation LauncherPreferencesViewController
 
 - (id)init {
     self = [super init];
-    self.title = localize(@"Profiles", nil);
+    self.title = localize(@"Settings", nil);
     return self;
 }
 
 - (NSString *)imageName {
-    return @"MenuProfiles";
+    return @"MenuSettings";
 }
 
 - (void)viewDidLoad
 {
+    self.getPreference = ^id(NSString *section, NSString *key){
+        NSString *keyFull = [NSString stringWithFormat:@"%@.%@", section, key];
+        return getPrefObject(keyFull);
+    };
+    self.setPreference = ^(NSString *section, NSString *key, id value){
+        NSString *keyFull = [NSString stringWithFormat:@"%@.%@", section, key];
+        setPrefObject(keyFull, value);
+    };
+    
+    self.hasDetail = YES;
+    self.prefDetailVisible = self.navigationController == nil;
+    
+    self.prefSections = @[@"general", @"video", @"control", @"java", @"debug"];
+
+    self.rendererKeys = getRendererKeys(NO);
+    self.rendererList = getRendererNames(NO);
+    
+    BOOL(^whenNotInGame)() = ^BOOL(){
+        return self.navigationController != nil;
+    };
+    
+    // 可以保留 showTouchInfoAlert 如果需要，但这里不再使用
+    // __weak typeof(self) weakSelf = self;
+    // void (^showTouchInfoAlert)(BOOL) = ^(BOOL enabled) { ... };
+
+    self.prefContents = @[
+        @[
+            // General settings (保持不变)
+            @{@"icon": @"cube"},
+            @{@"key": @"check_sha",
+              @"hasDetail": @YES,
+              @"icon": @"lock.shield",
+              @"type": self.typeSwitch,
+              @"enableCondition": whenNotInGame
+            },
+            @{@"key": @"cosmetica",
+              @"hasDetail": @YES,
+              @"icon": @"eyeglasses",
+              @"type": self.typeSwitch,
+              @"enableCondition": whenNotInGame
+            },
+            @{@"key": @"debug_logging",
+              @"hasDetail": @YES,
+              @"icon": @"doc.badge.gearshape",
+              @"type": self.typeSwitch,
+              @"action": ^(BOOL enabled){
+                  debugLogEnabled = enabled;
+                  NSLog(@"[Debugging] Debug log enabled: %@", enabled ? @"YES" : @"NO");
+              }
+            },
+            @{@"key": @"appicon",
+              @"hasDetail": @YES,
+              @"icon": @"paintbrush",
+              @"type": self.typePickField,
+              @"enableCondition": ^BOOL(){
+                  return UIApplication.sharedApplication.supportsAlternateIcons;
+              },
+              @"action": ^void(NSString *iconName) {
+                  if ([iconName isEqualToString:@"AppIcon-Light"]) {
+                      iconName = nil;
+                  }
+                  [UIApplication.sharedApplication setAlternateIconName:iconName completionHandler:^(NSError * _Nullable error) {
+                      if (error == nil) return;
+                      NSLog(@"Error in appicon: %@", error);
+                      showDialog(localize(@"Error", nil), error.localizedDescription);
+                  }];
+              },
+              @"pickKeys": @[
+                  @"AppIcon-Light",
+              ],
+              @"pickList": @[
+                  localize(@"preference.title.appicon-default", nil)
+              ]
+            },
+            @{@"key": @"hidden_sidebar",
+              @"hasDetail": @YES,
+              @"icon": @"sidebar.leading",
+              @"type": self.typeSwitch,
+              @"enableCondition": whenNotInGame
+            },
+            @{@"key": @"reset_warnings",
+              @"icon": @"exclamationmark.triangle",
+              @"type": self.typeButton,
+              @"enableCondition": whenNotInGame,
+              @"action": ^void(){
+                  resetWarnings();
+              }
+            },
+            @{@"key": @"reset_settings",
+              @"icon": @"trash",
+              @"type": self.typeButton,
+              @"enableCondition": whenNotInGame,
+              @"requestReload": @YES,
+              @"showConfirmPrompt": @YES,
+              @"destructive": @YES,
+              @"action": ^void(){
+                  loadPreferences(YES);
+                  [self.tableView reloadData];
+              }
+            },
+            @{@"key": @"erase_demo_data",
+              @"icon": @"trash",
+              @"type": self.typeButton,
+              @"enableCondition": ^BOOL(){
+                  NSString *demoPath = [NSString stringWithFormat:@"%s/.demo", getenv("POJAV_HOME")];
+                  int count = [NSFileManager.defaultManager contentsOfDirectoryAtPath:demoPath error:nil].count;
+                  return whenNotInGame() && count > 0;
+              },
+              @"showConfirmPrompt": @YES,
+              @"destructive": @YES,
+              @"action": ^void(){
+                  NSString *demoPath = [NSString stringWithFormat:@"%s/.demo", getenv("POJAV_HOME")];
+                  NSError *error;
+                  if([NSFileManager.defaultManager removeItemAtPath:demoPath error:&error]) {
+                      [NSFileManager.defaultManager createDirectoryAtPath:demoPath
+                                              withIntermediateDirectories:YES attributes:nil error:nil];
+                      [NSFileManager.defaultManager changeCurrentDirectoryPath:demoPath];
+                      if (getenv("DEMO_LOCK")) {
+                          [(LauncherNavigationController *)self.navigationController fetchLocalVersionList];
+                      }
+                  } else {
+                      NSLog(@"Error in erase_demo_data: %@", error);
+                      showDialog(localize(@"Error", nil), error.localizedDescription);
+                  }
+              }
+            }
+        ], @[
+            // Video and renderer settings (保持不变)
+            @{@"icon": @"video"},
+            @{@"key": @"renderer",
+              @"hasDetail": @YES,
+              @"icon": @"cpu",
+              @"type": self.typePickField,
+              @"enableCondition": whenNotInGame,
+              @"pickKeys": self.rendererKeys,
+              @"pickList": self.rendererList
+            },
+            @{@"key": @"resolution",
+              @"hasDetail": @YES,
+              @"icon": @"viewfinder",
+              @"type": self.typeSlider,
+              @"min": @(25),
+              @"max": @(150)
+            },
+            @{@"key": @"max_framerate",
+              @"hasDetail": @YES,
+              @"icon": @"timelapse",
+              @"type": self.typeSwitch,
+              @"enableCondition": ^BOOL(){
+                  return whenNotInGame() && (UIScreen.mainScreen.maximumFramesPerSecond > 60);
+              }
+            },
+            @{@"key": @"performance_hud",
+              @"hasDetail": @YES,
+              @"icon": @"waveform.path.ecg",
+              @"type": self.typeSwitch,
+              @"enableCondition": ^BOOL(){
+                  return [CAMetalLayer instancesRespondToSelector:@selector(developerHUDProperties)];
+              }
+            },
+            @{@"key": @"fullscreen_airplay",
+              @"hasDetail": @YES,
+              @"icon": @"airplayvideo",
+              @"type": self.typeSwitch,
+              @"action": ^(BOOL enabled){
+                  if (self.navigationController != nil) return;
+                  if (UIApplication.sharedApplication.connectedScenes.count < 2) return;
+                  if (enabled) {
+                      [self.presentingViewController performSelector:@selector(switchToExternalDisplay)];
+                  } else {
+                      [self.presentingViewController performSelector:@selector(switchToInternalDisplay)];
+                  }
+              }
+            },
+            @{@"key": @"silence_other_audio",
+              @"hasDetail": @YES,
+              @"icon": @"speaker.slash",
+              @"type": self.typeSwitch
+            },
+            @{@"key": @"silence_with_switch",
+              @"hasDetail": @YES,
+              @"icon": @"speaker.zzz",
+              @"type": self.typeSwitch
+            },
+            @{@"key": @"allow_microphone",
+              @"hasDetail": @YES,
+              @"icon": @"mic",
+              @"type": self.typeSwitch
+            },
+        ], @[
+            // Control settings
+            @{@"icon": @"gamecontroller"},
+            // ----- TouchController 子页面入口（替换之前的简单开关）-----
+            @{@"key": @"touchcontroller",
+              @"icon": @"hand.point.up.left",
+              @"type": self.typeChildPane,
+              @"enableCondition": whenNotInGame,
+              @"canDismissWithSwipe": @NO,
+              @"class": TouchControllerPreferencesViewController.class,
+              @"title": localize(@"preference.title.touchcontroller", nil)
+            },
+            // ------------------------------------------------------------
+            @{@"key": @"default_gamepad_ctrl",
+                @"icon": @"hammer",
+                @"type": self.typeChildPane,
+                @"enableCondition": whenNotInGame,
+                @"canDismissWithSwipe": @NO,
+                @"class": LauncherPrefContCfgViewController.class
+            },
+            @{@"key": @"hardware_hide",
+                @"icon": @"eye.slash",
+                @"hasDetail": @YES,
+                @"type": self.typeSwitch,
+            },
+            @{@"key": @"recording_hide",
+                @"icon": @"eye.slash",
+                @"hasDetail": @YES,
+                @"type": self.typeSwitch,
+            },
+            @{@"key": @"gesture_mouse",
+                @"icon": @"cursorarrow.click",
+                @"hasDetail": @YES,
+                @"type": self.typeSwitch,
+            },
+            @{@"key": @"gesture_hotbar",
+                @"icon": @"hand.tap",
+                @"hasDetail": @YES,
+                @"type": self.typeSwitch,
+            },
+            @{@"key": @"disable_haptics",
+                @"icon": @"wave.3.left",
+                @"hasDetail": @NO,
+                @"type": self.typeSwitch,
+            },
+            @{@"key": @"slideable_hotbar",
+                @"hasDetail": @YES,
+                @"icon": @"slider.horizontal.below.rectangle",
+                @"type": self.typeSwitch,
+                // ----- 禁用条件：当 TouchController 启用时禁用（保持原逻辑）-----
+                @"enableCondition": ^BOOL(){
+                    return ![self.getPreference(@"control", @"mod_touch_enable") boolValue];
+                }
+                // ---------------------------------------------------------------
+            },
+            @{@"key": @"press_duration",
+                @"hasDetail": @YES,
+                @"icon": @"cursorarrow.click.badge.clock",
+                @"type": self.typeSlider,
+                @"min": @(100),
+                @"max": @(1000),
+            },
+            @{@"key": @"button_scale",
+                @"hasDetail": @YES,
+                @"icon": @"aspectratio",
+                @"type": self.typeSlider,
+                @"min": @(50), // 80?
+                @"max": @(500)
+            },
+            @{@"key": @"mouse_scale",
+                @"hasDetail": @YES,
+                @"icon": @"arrow.up.left.and.arrow.down.right.circle",
+                @"type": self.typeSlider,
+                @"min": @(25),
+                @"max": @(300)
+            },
+            @{@"key": @"mouse_speed",
+                @"hasDetail": @YES,
+                @"icon": @"cursorarrow.motionlines",
+                @"type": self.typeSlider,
+                @"min": @(25),
+                @"max": @(300)
+            },
+            @{@"key": @"virtmouse_enable",
+                @"hasDetail": @YES,
+                @"icon": @"cursorarrow.rays",
+                @"type": self.typeSwitch
+            },
+            @{@"key": @"gyroscope_enable",
+                @"hasDetail": @YES,
+                @"icon": @"gyroscope",
+                @"type": self.typeSwitch,
+                @"enableCondition": ^BOOL(){
+                    return realUIIdiom != UIUserInterfaceIdiomTV;
+                }
+            },
+            @{@"key": @"gyroscope_invert_x_axis",
+                @"hasDetail": @YES,
+                @"icon": @"arrow.left.and.right",
+                @"type": self.typeSwitch,
+                @"enableCondition": ^BOOL(){
+                    return realUIIdiom != UIUserInterfaceIdiomTV;
+                }
+            },
+            @{@"key": @"gyroscope_sensitivity",
+                @"hasDetail": @YES,
+                @"icon": @"move.3d",
+                @"type": self.typeSlider,
+                @"min": @(50),
+                @"max": @(300),
+                @"enableCondition": ^BOOL(){
+                    return realUIIdiom != UIUserInterfaceIdiomTV;
+                }
+            }
+        ], @[
+        // Java tweaks (保持不变)
+            @{@"icon": @"sparkles"},
+            @{@"key": @"manage_runtime",
+                @"hasDetail": @YES,
+                @"icon": @"cube",
+                @"type": self.typeChildPane,
+                @"canDismissWithSwipe": @YES,
+                @"class": LauncherPrefManageJREViewController.class,
+                @"enableCondition": whenNotInGame
+            },
+            @{@"key": @"java_args",
+                @"hasDetail": @YES,
+                @"icon": @"slider.vertical.3",
+                @"type": self.typeTextField,
+                @"enableCondition": whenNotInGame
+            },
+            @{@"key": @"env_variables",
+                @"hasDetail": @YES,
+                @"icon": @"terminal",
+                @"type": self.typeTextField,
+                @"enableCondition": whenNotInGame
+            },
+            @{@"key": @"auto_ram",
+                @"hasDetail": @YES,
+                @"icon": @"slider.horizontal.3",
+                @"type": self.typeSwitch,
+                @"enableCondition": whenNotInGame,
+                @"warnCondition": ^BOOL(){
+                    return !isJailbroken;
+                },
+                @"warnKey": @"auto_ram_warn",
+                @"requestReload": @YES
+            },
+            @{@"key": @"allocated_memory",
+                @"hasDetail": @YES,
+                @"icon": @"memorychip",
+                @"type": self.typeSlider,
+                @"min": @(250),
+                @"max": @((NSProcessInfo.processInfo.physicalMemory / 1048576) * 0.85),
+                @"enableCondition": ^BOOL(){
+                    return !getPrefBool(@"java.auto_ram") && whenNotInGame();
+                },
+                @"warnCondition": ^BOOL(DBNumberedSlider *view){
+                    return view.value >= NSProcessInfo.processInfo.physicalMemory / 1048576 * 0.37;
+                },
+                @"warnKey": @"mem_warn"
+            }
+        ], @[
+            // Debug settings (保持不变)
+            @{@"icon": @"ladybug"},
+            @{@"key": @"debug_always_attached_jit",
+                @"hasDetail": @YES,
+                @"icon": @"app.connected.to.app.below.fill",
+                @"type": self.typeSwitch,
+                @"enableCondition": ^BOOL(){
+                    return DeviceRequiresTXMWorkaround() && whenNotInGame();
+                },
+            },
+            @{@"key": @"debug_skip_wait_jit",
+                @"hasDetail": @YES,
+                @"icon": @"forward",
+                @"type": self.typeSwitch,
+                @"enableCondition": whenNotInGame
+            },
+            @{@"key": @"debug_hide_home_indicator",
+                @"hasDetail": @YES,
+                @"icon": @"iphone.and.arrow.forward",
+                @"type": self.typeSwitch,
+                @"enableCondition": ^BOOL(){
+                    return
+                        self.splitViewController.view.safeAreaInsets.bottom > 0 ||
+                        self.view.safeAreaInsets.bottom > 0;
+                }
+            },
+            @{@"key": @"debug_ipad_ui",
+                @"hasDetail": @YES,
+                @"icon": @"ipad",
+                @"type": self.typeSwitch,
+                @"enableCondition": whenNotInGame
+            },
+            @{@"key": @"debug_auto_correction",
+                @"hasDetail": @YES,
+                @"icon": @"textformat.abc.dottedunderline",
+                @"type": self.typeSwitch
+            }
+        ]
+    ];
+
     [super viewDidLoad];
-
-    UIMenu *createMenu = [UIMenu menuWithTitle:localize(@"profile.title.create", nil) image:nil identifier:nil
-    options:UIMenuOptionsDisplayInline
-    children:@[
-        [UIAction
-            actionWithTitle:@"Vanilla" image:nil
-            identifier:@"vanilla" handler:^(UIAction *action) {
-                [self actionEditProfile:@{
-                    @"name": @"",
-                    @"lastVersionId": @"latest-release"}];
-            }],
-#if 0 // TODO
-        [UIAction
-            actionWithTitle:@"OptiFine" image:nil
-            identifier:@"optifine" handler:createHandler],
-#endif
-        [UIAction
-            actionWithTitle:@"Fabric/Quilt" image:nil
-            identifier:@"fabric_or_quilt" handler:^(UIAction *action) {
-                [self actionCreateFabricProfile];
-            }],
-        [UIAction
-            actionWithTitle:@"Forge" image:nil
-            identifier:@"forge" handler:^(UIAction *action) {
-                [self actionCreateForgeProfile];
-            }],
-        [UIAction
-            actionWithTitle:@"Modpack" image:nil
-            identifier:@"modpack" handler:^(UIAction *action) {
-                [self actionCreateModpackProfile];
-            }]
-    ]];
-    self.createButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd menu:createMenu];
-
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStyleInsetGrouped];
-    self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-
-    // Put navigation buttons back in place
-    self.navigationItem.rightBarButtonItems = @[[sidebarViewController drawAccountButton], self.createButtonItem];
-
-    // Pickup changes made in the profile editor and switching instance
-    [PLProfiles updateCurrent];
-    [self.tableView reloadData];
-    [self.navigationController performSelector:@selector(reloadProfileList)];
-}
-
-- (void)actionTogglePrefIsolation:(UISwitch *)sender {
-    if (!sender.isOn) {
-        setPrefBool(@"internal.isolated", NO);
+    if (self.navigationController == nil) {
+        self.tableView.alpha = 0.9;
     }
-    toggleIsolatedPref(sender.isOn);
-}
-
-- (void)actionCreateFabricProfile {
-    FabricInstallViewController *vc = [FabricInstallViewController new];
-    [self presentNavigatedViewController:vc];
-}
-
-- (void)actionCreateForgeProfile {
-    ForgeInstallViewController *vc = [ForgeInstallViewController new];
-    [self presentNavigatedViewController:vc];
-}
-
-- (void)actionCreateModpackProfile {
-    ModpackInstallViewController *vc = [ModpackInstallViewController new];
-    [self presentNavigatedViewController:vc];
-}
-
-- (void)actionEditProfile:(NSDictionary *)profile {
-    LauncherProfileEditorViewController *vc = [LauncherProfileEditorViewController new];
-    vc.profile = profile.mutableCopy;
-    [self presentNavigatedViewController:vc];
-}
-
-- (void)presentNavigatedViewController:(UIViewController *)vc {
-    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
-    //nav.navigationBar.prefersLargeTitles = YES;
-    [self presentViewController:nav animated:YES completion:nil];
-}
-
-#pragma mark Table view
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 2;
-}
-
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    switch (section) {
-        case 0: return localize(@"profile.section.instance", nil);
-        case 1: return localize(@"profile.section.profiles", nil);
-    }
-    return nil;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    switch (section) {
-        case 0: return 2;
-        case 1: return [PLProfiles.current.profiles count];
-    }
-    return 0;
-}
-
-- (void)setupInstanceCell:(UITableViewCell *) cell atRow:(NSInteger)row {
-    cell.userInteractionEnabled = !getenv("DEMO_LOCK");
-    if (row == 0) {
-        cell.imageView.image = [UIImage systemImageNamed:@"folder"];
-        cell.textLabel.text = localize(@"preference.title.game_directory", nil);
-        cell.detailTextLabel.text = getenv("DEMO_LOCK") ? @".demo" : getPrefObject(@"general.game_directory");
-    } else {
-        NSString *imageName;
-        if (@available(iOS 15.0, *)) {
-            imageName = @"folder.badge.gearshape";
-        } else {
-            imageName = @"folder.badge.gear";
-        }
-        cell.imageView.image = [UIImage systemImageNamed:imageName];
-        cell.textLabel.text = localize(@"profile.title.separate_preference", nil);
-        cell.detailTextLabel.text = localize(@"profile.detail.separate_preference", nil);
-        UISwitch *view = [UISwitch new];
-        [view setOn:getPrefBool(@"internal.isolated") animated:NO];
-        [view addTarget:self action:@selector(actionTogglePrefIsolation:) forControlEvents:UIControlEventValueChanged];
-        cell.accessoryView = view;
+    if (NSProcessInfo.processInfo.isMacCatalystApp) {
+        UIButton *closeButton = [UIButton buttonWithType:UIButtonTypeClose];
+        closeButton.frame = CGRectOffset(closeButton.frame, 10, 10);
+        [closeButton addTarget:self action:@selector(actionClose) forControlEvents:UIControlEventTouchUpInside];
+        [self.view addSubview:closeButton];
     }
 }
 
-- (void)setupProfileCell:(UITableViewCell *) cell atRow:(NSInteger)row {
-    NSMutableDictionary *profile = PLProfiles.current.profiles.allValues[row];
-
-    cell.textLabel.text = profile[@"name"];
-    cell.detailTextLabel.text = profile[@"lastVersionId"];
-    cell.imageView.layer.magnificationFilter = kCAFilterNearest;
-
-    UIImage *fallbackImage = [[UIImage imageNamed:@"DefaultProfile"] _imageWithSize:CGSizeMake(40, 40)];
-    [cell.imageView setImageWithURL:[NSURL URLWithString:profile[@"icon"]] placeholderImage:fallbackImage];
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    if (self.navigationController == nil) {
+        [self.presentingViewController performSelector:@selector(updatePreferenceChanges)];
+    }
 }
 
-- (UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSString *cellID = indexPath.section == kInstances ? @"InstanceCell" : @"ProfileCell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellID];
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        cell.detailTextLabel.numberOfLines = 0;
-        cell.detailTextLabel.lineBreakMode = NSLineBreakByWordWrapping;
-        if (indexPath.section == kProfiles) {
-            cell.imageView.frame = CGRectMake(0, 0, 40, 40);
-            cell.imageView.isSizeFixed = YES;
-        }
-    } else {
-        cell.imageView.image = nil;
-        cell.userInteractionEnabled = YES;
-        cell.accessoryView = nil;
-    }
-
-    if (indexPath.section == kInstances) {
-        [self setupInstanceCell:cell atRow:indexPath.row];
-    } else {
-        [self setupProfileCell:cell atRow:indexPath.row];
-    }
-
-    cell.textLabel.enabled = cell.detailTextLabel.enabled = cell.userInteractionEnabled;
-    return cell;
+- (void)actionClose {
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [tableView deselectRowAtIndexPath:indexPath animated:NO];
+#pragma mark UITableView
 
-    if (indexPath.section == kInstances) {
-        if (indexPath.row == 0) {
-            [self.navigationController pushViewController:[LauncherPrefGameDirViewController new] animated:YES];
-        }
-        return;
+- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section {
+    if (section == 0) { // Add to general section
+        return [NSString stringWithFormat:@"Angel Aura Amethyst %@-%s (%s/%s)\n%@ on %@ (%s)\nPID: %d",
+            NSBundle.mainBundle.infoDictionary[@"CFBundleShortVersionString"],
+            CONFIG_TYPE, CONFIG_BRANCH, CONFIG_COMMIT,
+            UIDevice.currentDevice.completeOSVersion, [HostManager GetModelName], getenv("POJAV_DETECTEDINST"), getpid()];
     }
 
-    [self actionEditProfile:PLProfiles.current.profiles.allValues[indexPath.row]];
-}
-
-#pragma mark Context Menu configuration
-
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle != UITableViewCellEditingStyleDelete) return;
-
-    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
-    NSString *title = localize(@"preference.title.confirm", nil);
-    // reusing the delete runtime message
-    NSString *message = [NSString stringWithFormat:localize(@"preference.title.confirm.delete_runtime", nil), cell.textLabel.text];
-    UIAlertController *confirmAlert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleActionSheet];
-    confirmAlert.popoverPresentationController.sourceView = cell;
-    confirmAlert.popoverPresentationController.sourceRect = cell.bounds;
-    UIAlertAction *ok = [UIAlertAction actionWithTitle:localize(@"OK", nil) style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
-        [PLProfiles.current.profiles removeObjectForKey:cell.textLabel.text];
-        if ([PLProfiles.current.selectedProfileName isEqualToString:cell.textLabel.text]) {
-            // The one being deleted is the selected one, switch to the random one now
-            PLProfiles.current.selectedProfileName = PLProfiles.current.profiles.allKeys[0];
-            [self.navigationController performSelector:@selector(reloadProfileList)];
-        } else {
-            [PLProfiles.current save];
-        }
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-    }];
-    UIAlertAction *cancel = [UIAlertAction actionWithTitle:localize(@"Cancel", nil) style:UIAlertActionStyleCancel handler:nil];
-    [confirmAlert addAction:cancel];
-    [confirmAlert addAction:ok];
-    [self presentViewController:confirmAlert animated:YES completion:nil];
-}
-
-- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (indexPath.section == kInstances || PLProfiles.current.profiles.count==1) {
-        return UITableViewCellEditingStyleNone;
+    NSString *footer = NSLocalizedStringWithDefaultValue(([NSString stringWithFormat:@"preference.section.footer.%@", self.prefSections[section]]), @"Localizable", NSBundle.mainBundle, @" ", nil);
+    if ([footer isEqualToString:@" "]) {
+        return nil;
     }
-    return UITableViewCellEditingStyleDelete;
+    return footer;
 }
 
 @end
