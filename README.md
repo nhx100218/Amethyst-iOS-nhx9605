@@ -54,8 +54,7 @@
 | **最低配置** | iOS 14.0 及以上             | iPhone 6s+/iPad 5代+/iPad Air 2+/iPad mini 4+/所有 iPad Pro/iPod touch 7代 |
 | **推荐配置** | iOS 14.5 及以上（体验更优） | iPhone XS+（不含 XR/SE 2代）、iPad 10代+/Air 4代+/mini 6代+/iPad Pro（不含9.7英寸） |
 
-> ⚠️ 关键提醒：iOS 14.0~14.4.2 存在严重兼容性问题，**强烈建议升级至 iOS 14.5+**；支持 iOS 17.x/iOS 18.x，但需电脑辅助配置，详情见 [官方JIT指南](https://wiki.angelauramc.dev/wiki/faq/ios/JIT.html#what-are-the-methods-to-enable-jit);支持 iOS 26.x(源码里称其为iOS 19.x)，但是并没有对其进行特殊适配,可能会出现不可预测的问题。
-
+> ⚠️ 关键提醒：iOS 14.0~14.4.2 存在严重兼容性问题，**强烈建议升级至 iOS 14.5+**；支持 iOS 17.x/iOS 18.x，但需电脑辅助配置，详情见 [官方JIT指南](https://wiki.angelauramc.dev/wiki/faq/ios/JIT.html#what-are-the-methods-to-enable-jit);支持 iOS 26.x并做了液态玻璃的适配。
 
 ### 🔧 侧载（Sideload）准备
 优先选择支持「永久签名+自动JIT」的工具，按优先级推荐：
@@ -74,6 +73,7 @@
 1. 前往 [GitHub Actions 标签页](https://github.com/nhx100218/Amethyst-iOS-nhx9605/actions) 下载 IPA 安装包
 2. (正常的安装步骤)
 
+> ⚠️ 注意：每日构建可能不稳定，请优先选择最新构建，若无法安装/运行游戏失败，再选择更早构建运行，构建失败的action不要下载。
 
 ### ⚡ 启用 JIT（必做！）
 JIT（Just-In-Time）是流畅运行游戏的核心，iOS 需通过以下工具启用，按自身环境选择：
@@ -89,7 +89,7 @@ JIT（Just-In-Time）是流畅运行游戏的核心，iOS 需通过以下工具�
 
 
 ## 🙏 贡献者
-Amethyst是惊人的，而且令人惊讶的稳定，如果没有帮助和为该项目做出贡献的社区，就不会这样！这是一些贡献者的名字：
+Amethyst的稳定，是各种帮助和为该项目做出贡献的社区所促成的，这是原版Amethyst贡献者的名字：
 
 @crystall1nedev - 项目管理员，iOS端口开发人员  
 @khanhduytran0 - iOS端口开发人员  
@@ -97,7 +97,8 @@ Amethyst是惊人的，而且令人惊讶的稳定，如果没有帮助和为该
 @Mathius-Boulay  
 @zhuowei  
 @jkcoxson   
-@Diatrus 
+@Diatrus
+
 
 
 ## 📦 第三方组件及许可证
