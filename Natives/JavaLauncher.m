@@ -140,6 +140,20 @@ int launchJVM(NSString *username, id launchTarget, int width, int height, int mi
     init_loadDefaultEnv();
     init_loadCustomEnv();
 
+    // ========== 添加 TouchController 支持 ==========
+    // 根据用户选择的通信模式设置环境变量（UDP 模式需要）
+    int touchMode = getPrefInt(@"control.mod_touch_mode");
+    if (touchMode == 1) { // UDP 模式
+        // 检查环境变量是否已存在，若未设置则添加
+        const char* existing = getenv("TOUCH_CONTROLLER_PROXY");
+        if (!existing) {
+            setenv("TOUCH_CONTROLLER_PROXY", "12450", 1);
+            NSLog(@"[JavaLauncher] TouchController UDP mode enabled, set TOUCH_CONTROLLER_PROXY=12450");
+        }
+    }
+    // 静态库模式 (touchMode == 2) 无需额外环境变量
+    // =============================================
+
     BOOL launchJar = NO;
     NSString *gameDir;
     NSString *defaultJRETag;
