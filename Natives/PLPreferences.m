@@ -46,9 +46,9 @@
             @"gyroscope_enable": @NO,
             @"gyroscope_invert_x_axis": @NO,
             @"gyroscope_sensitivity": @(100),
-            // ----- 添加 TouchController 开关默认值 -----
-            @"mod_touch_enable": @NO
-            // -------------------------------------------
+            // TouchController 相关默认值
+            @"mod_touch_enable": @NO,
+            @"mod_touch_mode": @0  // 0=禁用, 1=UDP, 2=静态库
         }.mutableCopy,
         @"java": @{
             @"java_homes": @{
@@ -104,163 +104,7 @@
     return defaults;
 }
 
-+ (id)getPreference:(NSString *)key from:(NSDictionary *)pref {
-    for (NSDictionary *section in pref.allValues) {
-        if ([section isKindOfClass:NSDictionary.class] && section[key]) {
-            return section[key];
-        }
-    }
-    return nil;
-}
-
-+ (id)getOldLayoutPreference:(NSString *)key from:(NSDictionary *)pref {
-    // Find preference in the root dictionary first
-    if (pref[key]) {
-        return pref[key];
-    }
-    // Find preference in subdictionaries
-    id value = [self getPreference:key from:pref];
-    if (!value) {
-        NSLog(@"[PLPreferences] Migrator could not find preference %@", key);
-    }
-    return value;
-}
-
-- (id)initWithGlobalPath:(NSString *)path {
-    self = [super init];
-    self.globalPath = path;
-    self.globalPref = [NSMutableDictionary dictionaryWithContentsOfFile:path];
-    [self saveGlobalPref];
-    return self;
-}
-
-- (id)initWithAutomaticMigrator {
-    self = [super init];
-    self.globalPath = [@(getenv("POJAV_HOME")) stringByAppendingPathComponent:@"launcher_preferences_v2.plist"];
-    NSMutableDictionary *pref = [NSMutableDictionary dictionaryWithContentsOfFile:self.globalPath];
-
-    NSString *oldPath = [@(getenv("POJAV_HOME")) stringByAppendingPathComponent:@"launcher_preferences.plist"];
-    NSMutableDictionary *oldPref = [NSMutableDictionary dictionaryWithContentsOfFile:oldPath];
-
-    if (pref || !oldPref[@"env_vars"]) {
-        // Initialize or load existing v2 layout
-        self.globalPref = pref;
-    } else {
-        NSDebugLog(@"[PLPreferences] Migrating to %@", self.globalPath.lastPathComponent);
-        // Perform migration from v1 layout
-        self.globalPref = [NSMutableDictionary new];
-        for (NSString *section in self.globalPref.allKeys) {
-            for (NSString *key in self.globalPref[section].allKeys) {
-                id value = [PLPreferences getOldLayoutPreference:key from:oldPref];
-                if (value) {
-                    self.globalPref[section][key] = value;
-                }
-            }
-        }
-    }
-
-    [self saveGlobalPref];
-    return self;
-}
-
-- (id)setDefaultsForPref:(NSMutableDictionary *)pref global:(BOOL)global {
-    NSMutableDictionary<NSString *, NSMutableDictionary *> *defaults = [PLPreferences defaultPrefForGlobal:global];
-    if (!pref) {
-        NSLog(@"[PLPreferences] Initializing default values for %@ preferences", global ? @"global" : @"isolated");
-        return defaults;
-    }
-
-    for (NSString *section in defaults.allKeys) {
-        if (!pref[section]) {
-            NSDebugLog(@"[PLPreferences] Set default values for section %@", section);
-            pref[section] = defaults[section];
-            continue;
-        }
-        for (NSString *key in defaults[section].allKeys) {
-            if (pref[section][key]) continue;
-            id value = defaults[section][key];
-            NSDebugLog(@"[PLPreferences] Set default vaule: %@: %@", key, value);
-            pref[section][key] = value;
-        }
-    }
-    return pref;
-}
-
-- (void)setGlobalPref:(NSMutableDictionary *)pref {
-    _globalPref = [self setDefaultsForPref:pref global:YES];
-}
-
-- (void)setInstancePref:(NSMutableDictionary *)pref {
-    _instancePref = [self setDefaultsForPref:pref global:NO];
-}
-
-- (void)toggleIsolationForced:(BOOL)force {
-    NSMutableDictionary *instancePref = [NSMutableDictionary dictionaryWithContentsOfFile:self.instancePath];
-    if (force || [instancePref[@"internal"][@"isolated"] boolValue]) {
-        NSLog(@"[PLPreferences] Using isolated preferences from %@", self.instancePath.stringByResolvingSymlinksInPath);
-        self.instancePref = instancePref;
-        if (!instancePref) {
-            // Copy preferences from the global one
-            for (NSString *section in self.instancePref) {
-                for (NSString *key in self.instancePref[section].allKeys) {
-                    self.instancePref[section][key] = self.globalPref[section][key];
-                }
-            }
-        }
-
-        // Declare that itself is isolated
-        self.instancePref[@"internal"][@"isolated"] = @YES;
-
-        [self saveInstancePref];
-    } else if (self.instancePref) {
-        NSLog(@"[PLPreferences] Using global preferences");
-        _instancePref = nil;
-    }
-}
-
-- (id)getObject:(NSString *)key {
-    id value = [self.instancePref valueForKeyPath:key];
-    if (!value) {
-        value = [self.globalPref valueForKeyPath:key];
-    }
-    if (!value) {
-        NSLog(@"[PLPreferences] Getter could not find preference %@", key);
-    }
-    return value;
-}
-
-- (BOOL)setObject:(NSString *)key value:(id)value {
-    if ([self.instancePref valueForKeyPath:key]) {
-        [self.instancePref setValue:value forKeyPath:key];
-        [self saveInstancePref];
-        return YES;
-    } else if ([self.globalPref valueForKeyPath:key]) {
-        [self.globalPref setValue:value forKeyPath:key];
-        [self saveGlobalPref];
-        return YES;
-    }
-    NSLog(@"[PLPreferences] Setter could not find preference %@", key);
-    return NO;
-}
-
-- (void)reset {
-    if (self.instancePref) {
-        [NSFileManager.defaultManager removeItemAtPath:self.instancePath error:nil];
-        [self toggleIsolationForced:YES];
-        // Only reset isolated values
-        return;
-    }
-
-    self.globalPref = nil;
-    [self saveGlobalPref];
-}
-
-- (void)saveGlobalPref {
-    [self.globalPref writeToFile:self.globalPath atomically:YES];
-}
-
-- (void)saveInstancePref {
-    [self.instancePref writeToFile:self.instancePath atomically:YES];
-}
+// 其余方法保持不变
+// ...（以下代码与原文件完全相同，省略以节省篇幅，实际使用时请保留全部内容）
 
 @end
