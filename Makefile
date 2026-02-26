@@ -342,6 +342,12 @@ payload: native dep_mg java jre assets
 	cp $(SOURCEDIR)/JavaApp/build/*.jar $(WORKINGDIR)/AngelAuraAmethyst.app/libs/ || exit 1
 	cp -R $(SOURCEDIR)/JavaApp/libs/caciocavallo/* $(WORKINGDIR)/AngelAuraAmethyst.app/libs_caciocavallo || exit 1
 	cp -R $(SOURCEDIR)/JavaApp/libs/caciocavallo17/* $(WORKINGDIR)/AngelAuraAmethyst.app/libs_caciocavallo17 || exit 1
+	# TouchController static library is linked via CMake, do not copy to Frameworks
+	if [ -f "$(SOURCEDIR)/TouchController/libproxy_server_ios.a" ] || [ -f "$(SOURCEDIR)/TouchController/libproxy_server_ios_simulator.a" ]; then \
+		echo '[Amethyst v$(VERSION)] TouchController library found, support enabled'; \
+	else \
+		echo '[Amethyst v$(VERSION)] TouchController library not found, support disabled'; \
+	fi
 	$(call METHOD_DIRCHECK,$(OUTPUTDIR)/Payload)
 	cp -R $(WORKINGDIR)/AngelAuraAmethyst.app $(OUTPUTDIR)/Payload
 	if [ '$(SLIMMED_ONLY)' != '1' ]; then \
