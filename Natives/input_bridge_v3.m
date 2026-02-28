@@ -498,18 +498,26 @@ void CallbackBridge_nativeSendCursorPos(char event, CGFloat x, CGFloat y) {
     }
 }
 
+static char currentModifiers;
+
 char getKeyModifiers(int key, int action) {
-    static char currMods;
     char mod;
     switch (key) {
         case GLFW_KEY_LEFT_SHIFT:
+        case GLFW_KEY_RIGHT_SHIFT:
             mod = GLFW_MOD_SHIFT;
             break;
         case GLFW_KEY_LEFT_CONTROL:
+        case GLFW_KEY_RIGHT_CONTROL:
             mod = GLFW_MOD_CONTROL;
             break;
         case GLFW_KEY_LEFT_ALT:
+        case GLFW_KEY_RIGHT_ALT:
             mod = GLFW_MOD_ALT;
+            break;
+        case GLFW_KEY_LEFT_SUPER:
+        case GLFW_KEY_RIGHT_SUPER:
+            mod = GLFW_MOD_SUPER;
             break;
         case GLFW_KEY_CAPS_LOCK:
             mod = GLFW_MOD_CAPS_LOCK;
@@ -518,29 +526,33 @@ char getKeyModifiers(int key, int action) {
             mod = GLFW_MOD_NUM_LOCK;
             break;
         default:
-            return currMods;
+            return currentModifiers;
     }
     if (action) {
-        currMods |= mod;
+        currentModifiers |= mod;
     } else {
-        currMods &= ~mod;
+        currentModifiers &= ~mod;
     }
-    return currMods;
+    return currentModifiers;
 }
 
 void CallbackBridge_nativeSendKey(int key, int scancode, int action, int mods)
 {
     if (GLFW_invoke_Key && isInputReady) {
 
+        int effectiveMods = mods;
+        if (effectiveMods == 0) {
+            effectiveMods = getKeyModifiers(key, action);
+        } else {
+            currentModifiers = (char) effectiveMods;
+        }
+
         keyDownBuffer[MAX(0, key-31)] = (jbyte)action;
 
-        // 修复：信任 UIKit modifier
-        // 删除 getKeyModifiers
-
         if (isUseStackQueueCall) {
-            sendData(EVENT_TYPE_KEY, key, scancode, action, mods);
+            sendData(EVENT_TYPE_KEY, key, scancode, action, effectiveMods);
         } else {
-            GLFW_invoke_Key((void*) showingWindow, key, scancode, action, mods);
+            GLFW_invoke_Key((void*) showingWindow, key, scancode, action, effectiveMods);
         }
     }
 
