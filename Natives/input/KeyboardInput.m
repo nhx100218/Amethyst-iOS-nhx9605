@@ -35,6 +35,10 @@ int keycodeTable[UIKeyboardHIDUsageKeyboardRightGUI+1];
     keycodeTable[UIKeyboardHIDUsageKeyboardLeftControl] = GLFW_KEY_LEFT_CONTROL;
     keycodeTable[UIKeyboardHIDUsageKeyboardRightControl] = GLFW_KEY_RIGHT_CONTROL;
 
+    // Command (GUI/Super) keys
+    keycodeTable[UIKeyboardHIDUsageKeyboardLeftGUI] = GLFW_KEY_LEFT_SUPER;
+    keycodeTable[UIKeyboardHIDUsageKeyboardRightGUI] = GLFW_KEY_RIGHT_SUPER;
+
     // Shift keys
     keycodeTable[UIKeyboardHIDUsageKeyboardLeftShift] = GLFW_KEY_LEFT_SHIFT;
     keycodeTable[UIKeyboardHIDUsageKeyboardRightShift] = GLFW_KEY_RIGHT_SHIFT;
@@ -103,6 +107,9 @@ int keycodeTable[UIKeyboardHIDUsageKeyboardRightGUI+1];
     }
     if (key.modifierFlags & UIKeyModifierControl) {
         modifiers |= GLFW_MOD_CONTROL;
+    }
+    if (key.modifierFlags & UIKeyModifierCommand) {
+        modifiers |= GLFW_MOD_SUPER;
     }
 
     // send the keycode
